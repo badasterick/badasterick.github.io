@@ -1,0 +1,6 @@
+<IfModule mod_expires.c>
+        ExpiresActive On
+        ExpiresDefault "access plus 2 minutes"
+		ErrorDocument 404 https://people.rit.edu/adz9726/
+</IfModule>
+Header set Cache-Control no-cache

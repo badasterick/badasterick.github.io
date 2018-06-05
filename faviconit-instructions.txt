@@ -1,0 +1,25 @@
+thanks for using faviconit!
+copy the files to your site and add this code inside the HTML <HEAD> tag:
+
+	<!-- ****** faviconit.com favicons ****** -->
+	<link rel="shortcut icon" href="/zalarfavicon.ico">
+	<link rel="icon" sizes="16x16 32x32 64x64" href="/zalarfavicon.ico">
+	<link rel="icon" type="image/png" sizes="196x196" href="/zalarfavicon-192.png">
+	<link rel="icon" type="image/png" sizes="160x160" href="/zalarfavicon-160.png">
+	<link rel="icon" type="image/png" sizes="96x96" href="/zalarfavicon-96.png">
+	<link rel="icon" type="image/png" sizes="64x64" href="/zalarfavicon-64.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="/zalarfavicon-32.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="/zalarfavicon-16.png">
+	<link rel="apple-touch-icon" href="/zalarfavicon-57.png">
+	<link rel="apple-touch-icon" sizes="114x114" href="/zalarfavicon-114.png">
+	<link rel="apple-touch-icon" sizes="72x72" href="/zalarfavicon-72.png">
+	<link rel="apple-touch-icon" sizes="144x144" href="/zalarfavicon-144.png">
+	<link rel="apple-touch-icon" sizes="60x60" href="/zalarfavicon-60.png">
+	<link rel="apple-touch-icon" sizes="120x120" href="/zalarfavicon-120.png">
+	<link rel="apple-touch-icon" sizes="76x76" href="/zalarfavicon-76.png">
+	<link rel="apple-touch-icon" sizes="152x152" href="/zalarfavicon-152.png">
+	<link rel="apple-touch-icon" sizes="180x180" href="/zalarfavicon-180.png">
+	<meta name="msapplication-TileColor" content="#FFFFFF">
+	<meta name="msapplication-TileImage" content="/zalarfavicon-144.png">
+	<meta name="msapplication-config" content="/browserconfig.xml">
+	<!-- ****** faviconit.com favicons ****** -->
