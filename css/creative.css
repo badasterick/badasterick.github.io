@@ -50,7 +50,7 @@ p {
   color: white;
 }
 .text-faded {
-  color: #222222;
+  color: white;
 }
 section {
   padding: 100px 0;
@@ -61,6 +61,66 @@ aside {
 .no-padding {
   padding: 0;
 }
+
+.leftcolumn {
+	float: left;
+	width: 25%;
+	padding: 10px;
+}
+
+.rightcolumn {
+	float: left;
+	width: 75%;
+	padding: 10px;
+}
+
+#videoOverlay{
+    position:absolute;
+    //background-color:#dadada;
+    z-index:1;
+    width:  100%;
+	height: 75%;
+	text-align: right;
+	top: 70%;
+	right: 1%;
+}
+
+ /* Default to hide the video on all devices 
+#video{display:none}
+
+//Default to display the image on all devices 
+#videosubstitute{display:block;width:auto;height:100%;}
+
+@media (min-aspect-ratio: 16/9) {
+  #video{
+    height: 150%;
+    top: -100%;
+  }
+  #videosubstitute{
+    display:block;
+    width: 100%;
+    height: auto;}
+}
+
+@media (max-aspect-ratio: 16/9) {
+  #video {
+    width: 150%;
+    left: -100%;
+  }
+  #videosubstitute{display:block;width:auto;height:100%;}
+}
+//if there is 992  pixels or more, then display the video but hide the image
+@media only screen and (min-width : 992px) {
+#video{display:block;}
+#videosubstitute{display:none}
+}   */
+
+.row:after {
+	content: "";
+	display: table;
+	clear: both;
+}
+
 .navbar-default {
   background-color: white;
   border-color: rgba(34, 34, 34, 0.05);
@@ -223,6 +283,7 @@ header .header-content .header-content-inner p {
 .service-box p {
   margin-bottom: 0;
 }
+
 .portfolio-box {
   position: relative;
   display: block;
@@ -233,7 +294,7 @@ header .header-content .header-content-inner p {
   color: white;
   opacity: 0;
   display: block;
-  background: rgba(240, 95, 64, 0.9);
+  //background: rgba(240, 95, 64, 0.9);
   position: absolute;
   bottom: 0;
   text-align: center;
@@ -265,7 +326,7 @@ header .header-content .header-content-inner p {
 }
 .portfolio-box:hover .portfolio-box-caption {
   opacity: 1;
-  background-color: #3e68ca;
+  background-color: rgba(34, 34, 34, 0.8);
 }
 .portfolio-box:focus {
   outline: none;
@@ -700,6 +761,7 @@ img{
   width: 100%;
   height: 100%; 
   overflow: hidden;
+  z-index: 1;
 }
 .video-container video {
   /* Make video to at least 100% wide and tall */
@@ -711,10 +773,10 @@ img{
   height: auto;
 
   /* Center the video */
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%,-50%);
+  position: relative;
+  
+  display: block;
+  
 }
 
 iframe, object, embed { max-width: 100%; }

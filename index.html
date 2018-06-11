@@ -19,7 +19,6 @@
     <link href="css/creative.css" rel="stylesheet">
 		
     <!-- Custom Fonts -->
-
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Merriweather:400,300,300italic,400italic,700,700italic,900,900italic' rel='stylesheet' type='text/css'>
 
@@ -79,13 +78,13 @@
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav navbar-right">
                     <li>
-                        <a class="page-scroll" href="#about">About</a>
+						<a class="page-scroll" href="#demoreel">Demo Reel</a>
                     </li>
 					<li>
-						<a class="page-scroll" href="#demoreel">Demo Reel</a>
+					    <a class="page-scroll" href="#portfolio">Portfolio</a>
 					</li>
                     <li>
-                        <a class="page-scroll" href="#portfolio">Portfolio</a>
+						<a class="page-scroll" href="#about">About</a>
                     </li>
                     <li>
                         <a class="page-scroll" href="#contact">Contact</a>
@@ -100,38 +99,25 @@
         <!-- /.container-fluid -->
     </nav>
 
-    <section id="about" class="bg-light-gray">
-        <div class="container">
-            <div class="row">
-					<div class="team-member">
-                        <img src="img/team/headshot.jpg" class="img-responsive img-circle" alt="">
-                        <h4 class="namehead">Anthony Zalar</h4>
-                        <p class="text-muted">Game Design and Development</p>
-                        <ul class="list-inline social-buttons">
-							<li><a href="https://www.linkedin.com/in/anthonyzalar" target="_blank"><i class="fa fa-linkedin-square fa-3x" aria-hidden="false"></i></a>
-                            </li>
-                            <li><a href="https://www.facebook.com/anthony.zalarvii" target="_blank"><i class="fa fa-facebook-square fa-3x" aria-hidden="false"></i></a>
-                            </li>
-							<li><a href="https://www.youtube.com/channel/UCa73RGNZcOktXXeP0xdPHDQ" target="_blank"><i class="fa fa-youtube-square fa-3x" aria-hidden="false"></i></a>
-                            </li>
-                        </ul>
-					</div>
-            </div>
-			<div class="row">
-                <div class="col-lg-8 col-lg-offset-2 text-center">
-                    <p>My passion is in the design and development of video games. My main goal is to create groundbreaking experiences that challenge traditional game design. I have a variety of skills ranging from: 3D game engine software, UX design, programming, and video production. Check out my resume at the top of the page for more information about me.</p>
-                	<!--<a target="_blank" onClick="window.open('img/resume.pdf');" class="btn btn-default btn-xl sr-button">Resume</a> -->
-				</div>
-			</div>
-        </div>
-    </section>
-	<section id="demoreel" class="no-padding">
+	<div id="demoreel">
+		<div class="video-container">
+			<!--<div id="videoOverlay">
+				<a href="https://www.youtube.com/watch?v=Icyo8f-ygvw" target="_blank"><i class="fa fa-youtube-square fa-3x" aria-hidden="false"></i></a>
+			</div>-->
+			<!--<img src="img\portfolio\thumbnails\demoreelimg.jpg" id="videosubstitute" alt="Full screen background video"> -->
+			<video autoplay muted loop>
+				<source src="video/Game Design Demo Reel.mp4" type="video/mp4">
+				Your browser does not support HTML5 video.
+			</video>
+		</div>
+	</div>
+	<!--<section id="demoreel" class="no-padding">
 	    <div class="video-container">
 			<iframe width="100%" height="720" style="margin-bottom: -5px;"
 			src="https://www.youtube.com/embed/Icyo8f-ygvw?rel=0" webkitAllowFullScreen mozallowfullscreen allowFullScreen frameBorder="0">
 			</iframe>
 	    </div>
-	</section>
+	</section> -->
 
     <section class="no-padding" id="portfolio">
         <div class="container-fluid">
@@ -337,28 +323,64 @@
     <aside class="bg-dark">
         <div class="container text-center">
             <div class="call-to-action">
-                <h2>Projects available on Dropbox!</h2>
-                <a target="_blank" href="https://www.dropbox.com/sh/71skj7ximllncig/AAB3ckRD31_rRWm1b2ieijxMa?dl=0" class="btn btn-default btn-xl sr-button">Download Here</a>
+                <!--<h2>Projects available on Google Drive!</h2> -->
+                <a target="_blank" href="https://drive.google.com/drive/folders/1_1pS1RRurOy_OG5f0Fn1EOARhJiJDBcz?usp=sharing" class="btn btn-default btn-xl sr-button">Download Projects Here</a>
             </div>
         </div>
     </aside>
 
+	<section id="about" class="bg-light-gray">
+        <div class="container">
+            <div class="row">
+					<div class="team-member">
+					<div class="row">
+					<div class="leftcolumn">
+					<br><br>
+                        <img src="img/team/headshot.jpg" class="img-responsive img-circle" alt="">
+					</div>
+					<div class="rightcolumn">
+						<div class="col-lg-8 col-lg-offset-2 text-left">
+					    <h2 class="section-heading">Anthony Zalar</h2>
+                        <p class="text-muted">Game Design and Development</p>
+							<p>My passion is in the design and development of video games. My main goal is to create groundbreaking experiences that challenge traditional game design. I have a variety of skills ranging from: 3D game engine software, UX design, programming, and video production. Check out my resume at the top of the page for more information about me.</p>
+							<!--<a target="_blank" onClick="window.open('img/resume.pdf');" class="btn btn-default btn-xl sr-button">Resume</a> -->
+						<br>
+						<ul class="list-inline social-buttons">
+							<li><a href="https://www.linkedin.com/in/anthonyzalar" target="_blank"><i class="fa fa-linkedin-square fa-3x" aria-hidden="false"></i></a>
+                            </li>
+                            <!--<li><a href="https://www.facebook.com/anthony.zalarvii" class="logo facebook" target="_blank"><i class="fa fa-facebook-square fa-3x" aria-hidden="false"></i></a>
+                            </li>-->
+							<li><a href="https://www.youtube.com/channel/UCa73RGNZcOktXXeP0xdPHDQ" target="_blank"><i class="fa fa-youtube-square fa-3x" aria-hidden="false"></i></a>
+                            </li>
+                        </ul>
+						</div>
+					</div>
+					</div>
+					</div>
+            </div>
+        </div>
+    </section>
+	
     <section id="contact">
         <div class="container">
             <div class="row">
-                <div class="col-lg-8 col-lg-offset-2 text-center">
+				<div class="leftcolumn">
+                    <img src="img/team/contact.jpg" class="img-responsive img-circle" alt="">
+				</div>
+				<div class="rightcolumn">
+                <div class="col-lg-8 col-lg-offset-2 text-left">
                     <h2 class="section-heading">Let's Get In Touch!</h2>
-                    <hr class="primary">
+					<br>
+                    <!--<hr class="primary" align="left"> -->
                     <p>Thank you for your time! If you have any questions feel free to contact me and I will get back to you as soon as possible.</p>
                 </div>
-                <div class="col-lg-4 col-lg-offset-2 text-center">
-                    <i class="fa fa-phone fa-3x sr-contact"></i>
-                    <p>(440) 725-2372</p>
+                <div class="col-lg-4 col-lg-offset-2 text-left">
+                    <p><i class="fa fa-phone fa-3x sr-contact"></i>&nbsp; &nbsp; (440) 725-2372</p>
                 </div>
-                <div class="col-lg-4 text-center">
-                    <i class="fa fa-envelope-o fa-3x sr-contact"></i>
-                    <p><a href="mailto:zalaranthony@gmail.com">zalaranthony@gmail.com</a></p>
+                <div class="col-lg-4 text-left">
+                    <i class="fa fa-envelope-o fa-3x sr-contact"></i> &nbsp; &nbsp; <a href="mailto:zalaranthony@gmail.com">zalaranthony@gmail.com</a>
                 </div>
+				</div>
             </div>
         </div>
     </section>
@@ -380,7 +402,7 @@
                                 <!-- Project Details Go Here -->
 								<h2>Robot Ball</h2>
 								<br>
-								<div class="img-responsive img-centered"> <!-- class="preview" align="center"> -->
+								<div class="img-responsive img-centered> <!-- class="preview" align="center"> -->
 									<img name="preview3" src="img/portfolio/fullsize/r1.jpg" alt=""/>
 								</div>
 								<div class="thumbnails" align ="center">
@@ -950,6 +972,6 @@ There are also features where users can plan out their own personal adventures. 
 
 </body>
 <footer style="text-align:center;">
-		&copy; 2017 Anthony Zalar. All rights reserved.
+		&copy; 2018 Anthony Zalar. All rights reserved.
 </footer>
 </html>
