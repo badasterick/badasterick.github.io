@@ -62,6 +62,10 @@ aside {
   padding: 0;
 }
 
+.topSpace{
+  padding-top: 10px;
+}
+
 .leftcolumn {
 	float: left;
 	width: 25%;
@@ -489,8 +493,10 @@ header .header-content .header-content-inner p {
   color: #3e68ca;
 }
 .no-gutter > [class*='col-'] {
-  padding-right: 0;
-  padding-left: 0;
+  padding-right: 10px;
+  padding-left: 10px;
+  padding-top: 10px;
+  padding-bottom: 10px;
 }
 .btn-default {
   color: #222222;
