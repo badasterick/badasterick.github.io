@@ -754,8 +754,8 @@ img{
 		}
 
 .imagespacing{
-		padding: 10px;
-		text-align: center;
+		padding: 0px;
+		text-align: left;
 }
 
 .video-container {
