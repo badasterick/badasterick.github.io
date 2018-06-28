@@ -72,6 +72,26 @@ aside {
 	padding: 10px;
 }
 
+@media (max-width: 768px){
+  .leftcolumn{
+		float: none;
+		//left: 0px;
+  }
+  .rightcolumn{
+		float: none;
+  }
+}
+
+@media (max-width: 992px){
+	  .leftcolumn{
+		float: none;
+		//left: 0px;
+  }
+  .rightcolumn{
+		float: none;
+  }
+}
+
 .rightcolumn {
 	float: left;
 	width: 75%;
