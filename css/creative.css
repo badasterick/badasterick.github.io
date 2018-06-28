@@ -819,11 +819,11 @@ img {vertical-align: middle;}
   min-width: 100%; 
   min-height: 100%; 
 
-  /* Setting width & height to auto prevents the browser from stretching or squishing the video */
-  width: auto;
+   /*Setting width & height to auto prevents the browser from stretching or squishing the video */
+  //width: auto;
   height: auto;
 
-  /* Center the video */
+  /*Center the video */
   position: relative;
   
   display: block;
