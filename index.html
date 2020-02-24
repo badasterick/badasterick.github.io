@@ -273,6 +273,22 @@
                 </div>
 				
 				<div class="col-lg-4 col-sm-6">
+                    <a href="#portfolioModal2" class="portfolio-box" data-toggle="modal">
+					    <img src="img/portfolio/thumbnails/ssjfilter.jpg" class="img-responsive" alt="">
+                        <div class="portfolio-box-caption">
+                            <div class="portfolio-box-caption-content">
+                                <div class="project-category text-faded">
+                                    App
+                                </div>
+                                <div class="project-name">
+                                    Power Up Filter
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+				<div class="col-lg-4 col-sm-6">
                     <a href="#portfolioModal12" class="portfolio-box" data-toggle="modal">
                         <img src="img/portfolio/thumbnails/vr1.jpg" class="img-responsive" alt="">
                         <div class="portfolio-box-caption">
@@ -287,23 +303,6 @@
                         </div>
                     </a>
                 </div>
-				
-				<div class="col-lg-4 col-sm-6">
-                    <a href="#portfolioModal2" class="portfolio-box" data-toggle="modal">
-					    <img src="img/portfolio/thumbnails/stopmotion.jpg" class="img-responsive" alt="">
-                        <div class="portfolio-box-caption">
-                            <div class="portfolio-box-caption-content">
-                                <div class="project-category text-faded">
-                                    Animation
-                                </div>
-                                <div class="project-name">
-                                    Super Stop Mario Bros.
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-
 				
            </div>
         </div>
@@ -429,7 +428,7 @@
 	</div>
 	
 	<!-- Portfolio Modal 2 -->
-    <div class="portfolio-modal modal fade" id="portfolioModal2" tabindex="-1" role="dialog" aria-hidden="true">
+	<div class="portfolio-modal modal fade" id="portfolioModal2" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="close-modal" data-dismiss="modal">
@@ -442,7 +441,72 @@
                     <div class="row">
                         <div class="col-lg-8 col-lg-offset-2">
                             <div class="modal-body" align="left">
-                                <!-- Project Details Go Here -->
+                                
+                                <h2>Power Up Filter</h2>
+								<br>
+								<div class="imagespacing"><embed width="720" height="480" src="https://www.youtube.com/embed/o5P7kOpvPZI" webkitAllowFullScreen mozallowfullscreen allowFullScreen></div>
+								<h3>Overview:</h3>
+								<p>The goal of this project was to create a filter effect for TikTok/Snapchat/Instagram. The effect will apply a Dragon Ball Z Super Saiyan effect (yellow hair, glowing aura, and blue eyes) to the user when they open their mouth. The effect will last 10 seconds after the user opens their mouth. If the user opens their mouth again before the time is up, they will power up further into a blue colored version of the effect. I believe that this effect could be popular with a few songs found on TikTok as well as for expressing excitement for hype moments recorded within the app.</p>							
+								<h3>Features:</h3>
+								<p><b>Segmentation:</b> I used the segmentation effect to layer particles behind the user. Normally segmentation is used to add in an image behind the user. After a few tests, I was able to get the user’s background to remain while having the particle effect played behind them as opposed to an image overwriting the entire background.</p>
+								<p><b>Aura Particles:</b> I created this effect by adjusting the emitter of the standard particle effect. Its purpose is to add a colored glow behind the user. I achieved this effect by modifying the alpha values of the default particle and adding an upwards velocity to make the effect appear to rise around the user.</p>
+								<p><b>Dust/Debris Particles:</b> This effect appears after the power up effect is used a second time (blue mode). This is to add more intensity to the effect. It is made from using small floating debris and then adding more intensity to the upward velocity. I wanted it to match the velocity of the Aura effect. </p>
+								<p><b>Audio:</b> There are two audio files I edited to match the audio guidelines of Lens Studio. Tracks are under 15 seconds long in .mp3 format with mono sound.</p>
+								<p><b>Eye Color:</b> The eye color of the user will change depending on which effect is available. Standard will have a teal eye color where Blue will have a darker blue color.</p>
+								<p><b>Head Binding:</b> a 3D hair model will be bound to the users head when the effects are activated. The color of the hair will change based on which effect is in place. Standard will have a blond color where Blue will have a blue color. I also added a Rim Color effect to the hair material to add a darker accent material to the outlines of the 3D model.</p>
+								<p><b>Retouch:</b> I used this for very minor tweaks. The teeth will get a little whiter, eyes sharper (to help with the eye color effect), and the skin slightly softer.</p>
+								<p><b>Face Liquify (Eyes):</b> I used this effect to enlarge the eyes slightly when the effect is active. I thought it would add to the likeliness of the show I based it off of.</p>
+								<p><b>Face Stretch:</b> I used this to compliment the Face Liquify effects. Most of the modifications are to make the eyes look more natural when the Face Liquify effect is activated.</p>
+								<h3>Coding:</h3>
+								<p><b>Interaction Manager Script:</b> Opening the user’s mouth will begin the effect. The effect starts by enabling the orthographic and effect cameras (which include all effects listed in Features). After the effects have been activated, there is a 10 second wait before turning the effect off. Originally I ended the effect on mouth close but I wanted the user to be able to be able to use the effect without thinking it would end if they closed their mouth. If the user opens their mouth again while the effects is running, it will up the intensity of the effect, changing the colors of some features and including additional particle effects. The timer will be reset if this effect is called and will end normally in 10 seconds. The user can repeat the effect as many times as they like within the 10 second timer. If it ends, they can always use it again but if the additional effects were used, they will be reset (and can be achieved by following the same process as the first attempt).</p>	
+                                <p><b>Audio Manager Script:</b> I have two audio tracks in the project. The first track plays an initial power up sound and the second track is a continuous loop of the powered up sound in an idle state. The first track will always play once if the user opens their mouth (follows the logic of the interaction manager). Once the track is done playing (5 seconds long), the second track will start and continuously loop until the effect ends (when the 10 second timer runs out).</p>
+								<p><b>Mute:</b> Allows users to mute audio on Tap. Tap is used to toggle between muted and unmuted. I included this as an extra feature in case a user didn’t want the audio to play as they recorded a song or to include the audio to layer over a song.</p>
+                                <div class="slideshow-container">
+									<div class="mySlides8" align ="left">
+											<img name="img40" style="width: 100%" src="img/portfolio/fullsize/ssj1.jpg" alt=""/>
+									</div>
+									<div class="mySlides8" align ="left">
+											<img name="img41" style="width: 100%" src="img/portfolio/fullsize/ssj4.jpg" alt=""/>
+									</div>
+									<div class="mySlides8" align ="left">
+											<img name="img42" style="width: 100%" src="img/portfolio/fullsize/ssj3.jpg" alt=""/>
+									</div>
+									<div class="mySlides8" align ="left">
+											<img name="img43" style="width: 100%" src="img/portfolio/fullsize/ssj2.jpg" alt=""/>
+									</div>	
+
+									<a class="prev" onclick="plusSlides(-1, 7)">&#10094;</a>
+									<a class="next" onclick="plusSlides(1, 7)">&#10095;</a>							
+								</div>
+								<ul class="list-inline">
+                                    <li>Date: January 2020</li>
+                                    <li>Software: Lens Studio</li>
+                                    <li>Category: App</li>
+                                </ul>
+                                <button type="button" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-times"></i> Close Project</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+	
+    <!-- Stop motion portfolio piece 
+	<div class="portfolio-modal modal fade" id="portfolioModal2" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="close-modal" data-dismiss="modal">
+                    <div class="lr">
+                        <div class="rl">
+                        </div>
+                    </div>
+                </div>
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-8 col-lg-offset-2">
+                            <div class="modal-body" align="left">
+                                
                                 <h2>Super Stop Mario Bros.</h2>
 								<br>
 								<div class="imagespacing"><embed width="720" height="480" src="https://www.youtube.com/embed/WYWv1-X-3yE" webkitAllowFullScreen mozallowfullscreen allowFullScreen></div>
@@ -458,7 +522,7 @@
 									<img onmouseover="previews.src=img7.src" name="img7" src="img/portfolio/fullsize/m3.jpg" alt=""/>
 									<img onmouseover="previews.src=img8.src" name="img8" src="img/portfolio/fullsize/m4.jpg" alt=""/>
 								</div> 
-								<br>-->
+								<br>
 								<h3>Role:</h3>
 								<p>I led this project as it's creative director. I was responsible for all of the storyboarding, asset creation, and video editing for this project. I had two teammates who assisted with the acting, lighting, and placement of assets for each frame.</p>	
                                 <ul class="list-inline">
@@ -474,6 +538,7 @@
             </div>
         </div>
     </div>
+	-->
 	
 	<!-- Portfolio Modal 3 -->
     <div class="portfolio-modal modal fade" id="portfolioModal3" tabindex="-1" role="dialog" aria-hidden="true">
@@ -980,8 +1045,8 @@ There are also features where users can plan out their own personal adventures. 
     <script src="vendor/magnific-popup/jquery.magnific-popup.min.js"></script>
 	<script>window.onload = function(){window.scrollBy(0, 85);} </script>
 	<script>
-	var slideIndex = [1,1,1,1,1,1,1];
-	var slideId = ["mySlides1", "mySlides2", "mySlides3", "mySlides4", "mySlides5", "mySlides6", "mySlides7"]
+	var slideIndex = [1,1,1,1,1,1,1,1];
+	var slideId = ["mySlides1", "mySlides2", "mySlides3", "mySlides4", "mySlides5", "mySlides6", "mySlides7", "mySlides8"]
 	
 	showSlides(1, 0);
 	showSlides(1, 1);
@@ -990,6 +1055,7 @@ There are also features where users can plan out their own personal adventures. 
 	showSlides(1, 4);
 	showSlides(1, 5);
 	showSlides(1, 6);
+	showSlides(1, 7);
 	
 	function plusSlides(n, no) {
 	showSlides(slideIndex[no] += n, no);
