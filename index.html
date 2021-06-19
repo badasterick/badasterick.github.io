@@ -111,7 +111,23 @@
     <section class="no-padding" id="portfolio">
         <div class="container-fluid bg-dark topSpace">
             <div class="row no-gutter"> 
-			
+
+                <div class="col-lg-4 col-sm-6">
+                    <a href="#portfolioModal8" class="portfolio-box" data-toggle="modal">
+						<img src="img/portfolio/thumbnails/magicleap.jpg" class="img-responsive" alt="">
+                        <div class="portfolio-box-caption">
+                            <div class="portfolio-box-caption-content">
+                                <div class="project-category text-faded">
+                                    AR
+                                </div>
+                                <div class="project-name">
+                                    Magic Leap
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+				
 				<div class="col-lg-4 col-sm-6">
                     <a href="#portfolioModal3" class="portfolio-box" data-toggle="modal">
 					    <img src="img/portfolio/thumbnails/immersive.jpg" class="img-responsive" alt="">
@@ -175,6 +191,22 @@
                         </div>
                     </a>
                 </div>
+
+				<div class="col-lg-4 col-sm-6">
+                    <a href="#portfolioModal1" class="portfolio-box" data-toggle="modal">
+						<img src="img/portfolio/thumbnails/robotgame.jpg" class="img-responsive" alt="">
+                        <div class="portfolio-box-caption">
+                            <div class="portfolio-box-caption-content">
+                                <div class="project-category text-faded">
+                                    Game
+                                </div>
+                                <div class="project-name">
+                                    Robot Ball
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
 				
 				<div class="col-lg-4 col-sm-6">
                     <a href="#portfolioModal11" class="portfolio-box" data-toggle="modal">
@@ -186,38 +218,6 @@
                                 </div>
                                 <div class="project-name">
                                     Pixalto
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-				
-				<div class="col-lg-4 col-sm-6">
-                    <a href="#portfolioModal1" class="portfolio-box" data-toggle="modal">
-						<img src="img/portfolio/thumbnails/robotgame.jpg" class="img-responsive" alt="">
-                        <div class="portfolio-box-caption">
-                            <div class="portfolio-box-caption-content">
-                                <div class="project-category text-faded">
-                                    Game
-                                </div>
-                                <div class="project-name">
-                                    Robot Game
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-				
-                <div class="col-lg-4 col-sm-6">
-                    <a href="#portfolioModal8" class="portfolio-box" data-toggle="modal">
-						<img src="img/portfolio/thumbnails/grayscale.jpg" class="img-responsive" alt="">
-                        <div class="portfolio-box-caption">
-                            <div class="portfolio-box-caption-content">
-                                <div class="project-category text-faded">
-                                    Game
-                                </div>
-                                <div class="project-name">
-                                    Grayscale
                                 </div>
                             </div>
                         </div>
@@ -278,10 +278,10 @@
                         <div class="portfolio-box-caption">
                             <div class="portfolio-box-caption-content">
                                 <div class="project-category text-faded">
-                                    App
+                                    AR
                                 </div>
                                 <div class="project-name">
-                                    Power Up Filter
+                                    Snapchat Filters
                                 </div>
                             </div>
                         </div>
@@ -389,7 +389,7 @@
                                 <!-- Project Details Go Here -->
 								<h2>Robot Ball</h2>
 								<br>
-								<div class="imagespacing"><embed width="720" height="480" src="https://www.youtube.com/embed/LsdNByajUUA" webkitAllowFullScreen mozallowfullscreen allowFullScreen></div>
+								<div class="imagespacing"><embed width="720" height="480" src="https://www.youtube.com/embed/nngLBs9lSvk" webkitAllowFullScreen mozallowfullscreen allowFullScreen></div>
 								<br>
 								<h3>Overview:</h3>
 								<p>Robot Ball is a time based puzzle/platformer game where you play as a robot that is about to self destruct. You must complete the level before this happens. The robot can be damaged by lasers and other traps which will speed up the self destruction.</p>								
@@ -442,11 +442,12 @@
                         <div class="col-lg-8 col-lg-offset-2">
                             <div class="modal-body" align="left">
                                 
-                                <h2>Power Up Filter</h2>
+                                <h2>Snapchat Filters</h2>
 								<br>
 								<div class="imagespacing"><embed width="720" height="480" src="https://www.youtube.com/embed/o5P7kOpvPZI" webkitAllowFullScreen mozallowfullscreen allowFullScreen></div>
 								<h3>Overview:</h3>
-								<p>The goal of this project was to create a filter effect for TikTok/Snapchat/Instagram. The effect will apply a Dragon Ball Z Super Saiyan effect (yellow hair, glowing aura, and blue eyes) to the user when they open their mouth. The effect will last 10 seconds after the user opens their mouth. If the user opens their mouth again before the time is up, they will power up further into a blue colored version of the effect. I believe that this effect could be popular with a few songs found on TikTok as well as for expressing excitement for hype moments recorded within the app.</p>							
+								<p>Originally this project was to create an AR filter for ByteDance (TikTok). As a result, I made the Power Up filter which is featured throughout this section. Since its completion, I have used the project as a base for other filters.</p> 
+								<p>In the past year, my filters have been viewed on Snapchat by users around the world over 420,000 times.</p>							
 								<h3>Features:</h3>
 								<p><b>Segmentation:</b> I used the segmentation effect to layer particles behind the user. Normally segmentation is used to add in an image behind the user. After a few tests, I was able to get the user’s background to remain while having the particle effect played behind them as opposed to an image overwriting the entire background.</p>
 								<p><b>Aura Particles:</b> I created this effect by adjusting the emitter of the standard particle effect. Its purpose is to add a colored glow behind the user. I achieved this effect by modifying the alpha values of the default particle and adding an upwards velocity to make the effect appear to rise around the user.</p>
@@ -462,21 +463,21 @@
                                 <p><b>Audio Manager Script:</b> I have two audio tracks in the project. The first track plays an initial power up sound and the second track is a continuous loop of the powered up sound in an idle state. The first track will always play once if the user opens their mouth (follows the logic of the interaction manager). Once the track is done playing (5 seconds long), the second track will start and continuously loop until the effect ends (when the 10 second timer runs out).</p>
 								<p><b>Mute:</b> Allows users to mute audio on Tap. Tap is used to toggle between muted and unmuted. I included this as an extra feature in case a user didn’t want the audio to play as they recorded a song or to include the audio to layer over a song.</p>
                                 <div class="slideshow-container">
-									<div class="mySlides8" align ="left">
+									<div class="mySlides2" align ="left">
 											<img name="img40" style="width: 100%" src="img/portfolio/fullsize/ssj1.jpg" alt=""/>
 									</div>
-									<div class="mySlides8" align ="left">
+									<div class="mySlides2" align ="left">
 											<img name="img41" style="width: 100%" src="img/portfolio/fullsize/ssj4.jpg" alt=""/>
 									</div>
-									<div class="mySlides8" align ="left">
+									<div class="mySlides2" align ="left">
 											<img name="img42" style="width: 100%" src="img/portfolio/fullsize/ssj3.jpg" alt=""/>
 									</div>
-									<div class="mySlides8" align ="left">
+									<div class="mySlides2" align ="left">
 											<img name="img43" style="width: 100%" src="img/portfolio/fullsize/ssj2.jpg" alt=""/>
 									</div>	
 
-									<a class="prev" onclick="plusSlides(-1, 7)">&#10094;</a>
-									<a class="next" onclick="plusSlides(1, 7)">&#10095;</a>							
+									<a class="prev" onclick="plusSlides(-1, 1)">&#10094;</a>
+									<a class="next" onclick="plusSlides(1, 1)">&#10095;</a>							
 								</div>
 								<ul class="list-inline">
                                     <li>Date: January 2020</li>
@@ -557,15 +558,28 @@
                                 <!-- Project Details Go Here -->
                                 <h2>Medical Simulations</h2>
 								<br>	
-								<div class="imagespacing"><embed width="720" height="480" src="https://www.youtube.com/embed/dJlKqNM5-sQ" webkitAllowFullScreen mozallowfullscreen allowFullScreen></div>
+								<div class="imagespacing"><embed width="720" height="480" src="https://www.youtube.com/embed/9JWHc0U0E5o" webkitAllowFullScreen mozallowfullscreen allowFullScreen></div>
 								<h3>Overview:</h3>
-								<p>I professionally develop VR/AR surgery simulations. Many of these simulations use a haptic pen which allows surgeons to feel objects in 3D space. The goal of these simulations is to allow doctors a chance to practice surgeries in virtual space before the actual surgery occurs.
+								<p>I professionally developed VR/AR surgery simulations. Many of these simulations use a haptic pen which allows surgeons to feel objects in 3D space. The goal of these simulations is to allow doctors a chance to practice surgeries in virtual space before the actual surgery occurs.
 								</p>
 								<h3>Role:</h3>
-								<p>As Technical Designer, I develop Virtual Reality simulations that allow doctors to interact with real patient data in 3D space. I am responsible for the design and development of the simulations. Additionally I manager the User Experience and create videos to be used as marketing content.
+								<p>As Technical Designer, I develop Virtual Reality simulations that allow doctors to interact with real patient data in 3D space. I was responsible for the design and development of the simulations. Additionally I managed the User Experience and created videos to be used for marketing content. Below are a few of the simulations that I was in charge of developing.
 								</p>
+								<h3>Cranial Vault:</h3>
 								<div class="imagespacing"><embed width="720" height="480" src="https://www.youtube.com/embed/80YLnguH33k" webkitAllowFullScreen mozallowfullscreen allowFullScreen></div>
 								<br>
+								<p>Though I have made many simulations, I am not actually a surgeon. Please excuse my misuse of medical jargon. The goal of the cranial vault surgery is for a doctor to rearrange the patient’s skull to prevent brain damage caused from deformity. This simulation provides a rendered version of a patient’s skull that has been broken up into four pieces that the doctor will manipulate when performing the procedure. On the monitors in the back of the operating room, there are images and information about the patient. Additionally our company logo was included. Often when demoing this simulation, I would swap in the logo for the visiting company to add some personalization. There is also a near monitor that contains the operation steps and finally the closest monitor is for user interaction with the tools I built into the simulation.</p>
+								<h3>Tools:</h3>
+								<p><b>Opacity:</b>Allows the doctor to adjust the transparency of the skull pieces. This allows for more precision when seeing how pieces overlap with each other.</p>
+								<p><b>Measure:</b>A ruler that allows doctors to know the distance between two points in the 3D space.</p>
+								<p><b>Draw:</b>Allows the doctor to write down notes or draw whatever else may be needed at that point in 3D space.</p>
+								<p><b>Link:</b>Connects the two large skull pieces together. This was a specific request from the doctor we were working with.</p>
+								<p></p>
+								<h3>Craniotomy:</h3>
+								<div class="imagespacing"><embed width="720" height="480" src="https://www.youtube.com/embed/L1b0rA9XiJs" webkitAllowFullScreen mozallowfullscreen allowFullScreen></div>
+								<br>
+								<p>The goal of this surgery is to cut a hole in the skull that makes it easy for the doctor to access a tumor (or whatever else they cut your head open for). For this video, our amazing 3D artist had not joined the company yet so please forgive the old operating room setup. The right monitor contains the steps in order to complete the surgery. The middle monitor contains CT images of the patient’s head that can be scrubbed through by using the VR controller. The left monitor is where our tools are located and can be moved freely throughout the operating room. This three monitor setup: tool monitor, operation steps, and patient information is the standard set up I used across all of our simulations. If a doctor completed one of our simulations, he/she would already know the basics for our other simulations.</p>   
+								<p>To start this simulation, we use a haptic pen to place three points on the patient’s skull which decide where a clamp will be placed to keep the head steady. From there, the surgeon can draw an outline of the part of the head they want removed. The left monitor allows the surgeon to undo or clear drawings if needed. When ready, the surgeon selects a point they want to be the center for removal and then I run a flood algorithm that takes all of the voxels that make up the skull up until the drawing and deletes them. To keep this as simple as possible, I set up most interactions to occur with the button press of the haptic pen.</p>
 								<ul class="list-inline">
                                     <li>Date: May 2018</li>
                                     <li>Software: Unity</li>
@@ -707,7 +721,7 @@
 								<br>	
 								<div class="imagespacing"><embed width="720" height="480" src="https://www.youtube.com/embed/UBW3CVzAVRU" webkitAllowFullScreen mozallowfullscreen allowFullScreen></div>
 								<h3>Overview:</h3>
-								<p>Night Journey is an open world adventure game where you play as a thieft who lives in a magical forest.In the forest there are travelers and creatures that you will encounter. Your interactions and items you find within the environment determine the fate of the characters at the end of the night.</p>
+								<p>Night Journey is an open world adventure game where you play as a thief who lives in a magical forest. In the forest there are travelers and creatures that you will encounter. Your interactions and items you find within the environment determine the fate of the characters at the end of the night.</p>
 								<h3>Role:</h3>
 								<p>I designed and developed this project over 5 weeks. My goal was to utilize the Unreal Engine's procedural foliage tool to create the level. Many of the assets used were from the Unreal Marketplace.This project was showcased as part of Imagine RIT 2016.</p>
                                 <div class="slideshow-container">
@@ -825,34 +839,20 @@ There are also features where users can plan out their own personal adventures. 
                         <div class="col-lg-8 col-lg-offset-2">
                             <div class="modal-body" align="left">
                                 <!-- Project Details Go Here -->
-                                <h2>GrayScale</h2>
+                                <h2>Magic Leap SDK</h2>
 								<br>
-								<div class="imagespacing"><embed width="720" height="480" src="https://www.youtube.com/embed/Jvbrv4VwQhU" webkitAllowFullScreen mozallowfullscreen allowFullScreen></div>								
+								<div class="imagespacing"><embed width="720" height="480" src="https://www.youtube.com/embed/hGsb-befW4E" webkitAllowFullScreen mozallowfullscreen allowFullScreen></div>								
 								<h3>Overview:</h3>
-								<p>GrayScale plays as if you were playing a tower defense game on a pad of paper. Stick figure enemies with different abilities will appear from outside of the screen to try to damage your player. Use the mouse as if it were a pencil and erase the enemies. You can also use the mouse to "draw" obstacles to help prevent the enemy advances. There are ten levels total and a boss battle to win the game.</p>
+								<p>The Magic Leap 1 is an AR device created to harmonize people and technology to create a better, more united world. The Magic Leap SDK is how engineers around the world utilize the Magic Leap device to create the product they desire (some examples in the above video).</p>
 								<h3>Role:</h3>
-								<p>My primary roles were as project manager and game designer. Our team consisted of five people with an eight week development cycle. I also worked on the sound, UX desgin, and opening sequence for the game.</p>
-                                <div class="slideshow-container">
-									<div class="mySlides2">
-										<img name="img29" style="width: 100%" src="img/portfolio/fullsize/g4.jpg" alt=""/>
-									</div>
-									<div class="mySlides2">
-										<img name="img30" style="width: 100%" src="img/portfolio/fullsize/g2.jpg" alt=""/>
-									</div>
-									<div class="mySlides2">
-										<img name="img31" style="width: 100%" src="img/portfolio/fullsize/g3.jpg" alt=""/>
-									</div>
-									<div class="mySlides2">
-										<img name="img32" style="width: 100%" src="img/portfolio/fullsize/g1.jpg" alt=""/>
-									</div>
-									
-									<a class="prev" onclick="plusSlides(-1, 1)">&#10094;</a>
-									<a class="next" onclick="plusSlides(1, 1)">&#10095;</a>
-								</div>
+								<p>My work focused on the integration of the Magic Leap SDK into Unreal Engine 4. Every new software release would include the support of new features into the Magic Leap SDK. My job was to set up developer test projects that would be used to guarantee the new features would be working at 100% at the time of release. Additionally I was in charge of an automation test pipeline of these features.  Unfortunately due to NDA, I cannot showcase the projects I worked on. By the time I left Magic Leap, we had over 40 different scenarios that would be reviewed every release.</p>
+                                <p>Two of my favorite projects I developed were a checkers and darts game. These games showcased wall and surface recognition, 3D object interaction, multiple user interaction at a set coordinate point, and raycasting. Though I can’t show my exact projects, Magic Leap has created a great <a href="https://www.youtube.com/playlist?list=PL_j5e9ibbeEOnErGPzmN--TnXCkpIBBZA">video series</a> that utilizes many of the features I worked on. Below is a raycast video tutorial which is one of the ways I made it so a person could pick up a checker or dart. </p>
+								<div class="imagespacing"><embed width="720" height="480" src="https://www.youtube.com/embed/x4UNyxqM3w" webkitAllowFullScreen mozallowfullscreen allowFullScreen></div>
+								<br>
 								<ul class="list-inline">
-                                    <li>Date: April 2013</li>
-                                    <li>Software: XNA</li>
-                                    <li>Category: Games</li>
+                                    <li>Date: April 2020</li>
+                                    <li>Software: Magic Leap SDK</li>
+                                    <li>Category: AR</li>
                                 </ul>
                                 <button type="button" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-times"></i> Close Project</button>
                             </div>
@@ -927,6 +927,7 @@ There are also features where users can plan out their own personal adventures. 
 								<div class="imagespacing"><embed width="720" height="480" src="https://www.youtube.com/embed/kPrkTdDQyIw" webkitAllowFullScreen mozallowfullscreen allowFullScreen></div>
 							    <!--<br>
 								<p><a class="links" href="https://www.dropbox.com/sh/71skj7ximllncig/AAB2SZOrcAX51ovuxQ7TgRQya/NetEase%20Games?dl=0" target="_blank">Download Prototype Here</a></p>-->
+								<br>
 								<ul class="list-inline">
                                     <li>Date: July 2016</li>
                                     <li>Software: Axure</li>
@@ -1080,6 +1081,6 @@ There are also features where users can plan out their own personal adventures. 
 
 </body>
 <footer style="text-align:center;">
-		&copy; 2020 Anthony Zalar. All rights reserved.
+		&copy; 2021 Anthony Zalar. Coded this site from scratch.
 </footer>
 </html>
