@@ -435,7 +435,7 @@ header .header-content .header-content-inner p {
 .portfolio-modal .modal-dialog {
   margin: 0;
   height: 100%;
-  width: auto;
+  width: auto; /* where I would change the width of the modal */
 }
 .portfolio-modal .modal-content {
   border-radius: 0;
@@ -444,7 +444,7 @@ header .header-content .header-content-inner p {
   box-shadow: none;
   border: none;
   min-height: 100%;
-  padding: 100px 0;
+  padding: 0px 0;
   text-align: center;
 }
 .portfolio-modal .modal-content h2 {
@@ -468,17 +468,18 @@ header .header-content .header-content-inner p {
   margin-bottom: 30px;
 }
 .portfolio-modal .close-modal {
-  position: absolute;
+  position: sticky;
   width: 75px;
   height: 75px;
   background-color: transparent;
   top: 25px;
-  right: 25px;
+  left: 25px; /*used to be: right: 25px */
   cursor: pointer;
 }
 .portfolio-modal .close-modal:hover {
   opacity: 0.3;
 }
+/* WHERE THE X is Made below */
 .portfolio-modal .close-modal .lr {
   height: 75px;
   width: 1px;
