@@ -68,7 +68,7 @@
         <div class="container-fluid">
             <!-- Brand and toggle get grouped for better mobile display -->
             <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <button type="button" onclick="pauseAllVideos();" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
                     <span class="sr-only">Toggle navigation</span> Menu <i class="fa fa-bars"></i>
                 </button>
                 <a class="navbar-brand page-scroll" href="#page-top">Anthony Zalar</a>
@@ -376,7 +376,7 @@
     <div class="portfolio-modal modal fade" id="portfolioModal1" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="close-modal" data-dismiss="modal">
+                <div class="close-modal" data-dismiss="modal" onclick="pauseAllVideos();">
                     <div class="lr">
                         <div class="rl">
                         </div>
@@ -389,7 +389,7 @@
                                 <!-- Project Details Go Here -->
 								<h2>Robot Ball</h2>
 								<br>
-								<div class="imagespacing"><embed width="720" height="480" src="https://www.youtube.com/embed/UWTAdS52b-w" webkitAllowFullScreen mozallowfullscreen allowFullScreen></div>
+								<div class="imagespacing"><embed width="720" height="480" src="https://www.youtube.com/embed/UWTAdS52b-w?enablejsapi=1&autoplay=0&rel=0&mute=0" frameborder="0" allowFullScreen></embed></div>
 								<br>
 								<h3>Overview:</h3>
 								<p>Robot Ball is a time based puzzle/platformer game where you play as a robot that is about to self destruct. You must complete the level before this happens. The robot can be damaged by lasers and other traps which will speed up the self destruction.</p>								
@@ -417,7 +417,7 @@
                                     <li>Software: Unreal Engine 4</li>
                                     <li>Category: Games</li>
                                 </ul>
-                                <button type="button" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-times"></i> Close Project</button>
+                                <button type="button"  onclick="pauseAllVideos();" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-times"></i>Close Project</button>
 								</div>
 							</div>
 						</div>
@@ -431,7 +431,7 @@
 	<div class="portfolio-modal modal fade" id="portfolioModal2" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="close-modal" data-dismiss="modal">
+                <div class="close-modal" data-dismiss="modal" onclick="pauseAllVideos();">
                     <div class="lr">
                         <div class="rl">
                         </div>
@@ -484,7 +484,7 @@
                                     <li>Software: Lens Studio</li>
                                     <li>Category: App</li>
                                 </ul>
-                                <button type="button" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-times"></i> Close Project</button>
+                                <button type="button" onclick="pauseAllVideos();" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-times"></i> Close Project</button>
                             </div>
                         </div>
                     </div>
@@ -545,7 +545,7 @@
     <div class="portfolio-modal modal fade" id="portfolioModal3" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="close-modal" data-dismiss="modal">
+                <div class="close-modal" data-dismiss="modal" onclick="pauseAllVideos();">
                     <div class="lr">
                         <div class="rl">
                         </div>
@@ -585,7 +585,7 @@
                                     <li>Software: Unity</li>
                                     <li>Category: Simulation</li>
                                 </ul>
-                                <button type="button" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-times"></i> Close Project</button>
+                                <button type="button" onclick="pauseAllVideos();" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-times"></i> Close Project</button>
                             </div>
                         </div>
                     </div>
@@ -598,7 +598,7 @@
     <div class="portfolio-modal modal fade" id="portfolioModal4" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="close-modal" data-dismiss="modal">
+                <div class="close-modal" data-dismiss="modal" onclick="pauseAllVideos();">
                     <div class="lr">
                         <div class="rl">
                         </div>
@@ -611,7 +611,7 @@
                                 <!-- Project Details Go Here -->
                                 <h2>Fighter Project</h2>
 								<br>	
-								<div class="imagespacing"><embed width="720" height="480" src="https://www.youtube.com/embed/UiGGbjNTpLs" webkitAllowFullScreen mozallowfullscreen allowFullScreen></div>
+								<div class="imagespacing"><embed src="https://www.youtube.com/embed/UiGGbjNTpLs?enablejsapi=1&autoplay=0&rel=0&mute=0" frameborder="0" width="720" height="480" webkitAllowFullScreen mozallowfullscreen allowFullScreen></embed></div>
 								<h3>Overview:</h3>
 								<p>This project was created as a side project as part of a Developer Support & Documentation internship at Epic Games. It's purpose was to demonstrate and document the steps to make a fighting game quickly using the Unreal Engine. This is a two player fighting game where each player has three types of punches and a block that they can use. The types of punches work with a rock, paper, scissors style mechanic: Jab beats Uppercut, Uppercut beats Hook, and Hook beats Jab. 
 								</p>
@@ -639,7 +639,7 @@
                                     <li>Software: Unreal Engine 4</li>
                                     <li>Category: Games</li>
                                 </ul>
-                                <button type="button" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-times"></i> Close Project</button>
+                                <button type="button" onclick="pauseAllVideos();" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-times"></i> Close Project</button>
                             </div>
                         </div>
                     </div>
@@ -652,7 +652,7 @@
     <div class="portfolio-modal modal fade" id="portfolioModal5" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="close-modal" data-dismiss="modal">
+                <div class="close-modal" data-dismiss="modal" onclick="pauseAllVideos();">
                     <div class="lr">
                         <div class="rl">
                         </div>
@@ -693,7 +693,7 @@
                                     <li>Software: Unity</li>
                                     <li>Category: Games</li>
                                 </ul>
-                                <button type="button" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-times"></i> Close Project</button>
+                                <button type="button" onclick="pauseAllVideos();" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-times"></i> Close Project</button>
                             </div>
                         </div>
                     </div>
@@ -706,7 +706,7 @@
     <div class="portfolio-modal modal fade" id="portfolioModal6" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="close-modal" data-dismiss="modal">
+                <div class="close-modal" data-dismiss="modal" onclick="pauseAllVideos();">
                     <div class="lr">
                         <div class="rl">
                         </div>
@@ -719,7 +719,7 @@
                                 <!-- Project Details Go Here -->
                                 <h2>Night Journey</h2>
 								<br>	
-								<div class="imagespacing"><embed width="720" height="480" src="https://www.youtube.com/embed/UBW3CVzAVRU" webkitAllowFullScreen mozallowfullscreen allowFullScreen></div>
+								<div class="imagespacing"><embed src="https://www.youtube.com/embed/UBW3CVzAVRU?enablejsapi=1&autoplay=0&rel=0&mute=0" frameborder="0" width="720" height="480" webkitAllowFullScreen mozallowfullscreen allowFullScreen></embed></div>
 								<h3>Overview:</h3>
 								<p>Night Journey is an open world adventure game where you play as a thief who lives in a magical forest. In the forest there are travelers and creatures that you will encounter. Your interactions and items you find within the environment determine the fate of the characters at the end of the night.</p>
 								<h3>Role:</h3>
@@ -746,7 +746,7 @@
                                     <li>Software: Unreal Engine 4</li>
                                     <li>Category: Games</li>
                                 </ul>
-                                <button type="button" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-times"></i> Close Project</button>
+                                <button type="button" onclick="pauseAllVideos();" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-times" onClick="toggleVideo('hide');"></i>Close Project</button>
                             </div>
                         </div>
                     </div>
@@ -759,7 +759,7 @@
     <div class="portfolio-modal modal fade" id="portfolioModal7" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="close-modal" data-dismiss="modal">
+                <div class="close-modal" data-dismiss="modal" onclick="pauseAllVideos();">
                     <div class="lr">
                         <div class="rl">
                         </div>
@@ -772,7 +772,7 @@
                                 <!-- Project Details Go Here -->
                                 <h2>Gloom Box</h2>
 								<br>	
-								<div class="imagespacing"><embed width="720" height="480" src="https://www.youtube.com/embed/s-vPbBFt2nw" webkitAllowFullScreen mozallowfullscreen allowFullScreen></div>
+								<div class="imagespacing"><embed src="https://www.youtube.com/embed/s-vPbBFt2nw?enablejsapi=1&autoplay=0&rel=0&mute=0" frameborder="0" width="720" height="480" webkitAllowFullScreen mozallowfullscreen allowFullScreen></embed></div>
 								<h3>Overview:</h3>
 								<p>Created as part of my Master's Capstone focused on User Experience in Games. Gloom Box is a music driven puzzle/platformer game where the player can mash up different genres of music to discover new abilities. This project was showcased at Imagine RIT 2017 and won 3rd place at RPI GameFest 2017.</p>
 								<h3>Role:</h3>
@@ -815,8 +815,8 @@ There are also features where users can plan out their own personal adventures. 
                                     <li>Software: Unity</li>
                                     <li>Category: Games</li>
                                 </ul>
-                                <button type="button" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-times"></i> Close Project</button>
-                            </div>
+                                <button type="button" onclick="pauseAllVideos();" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-times"></i>Close Project</button>
+							</div>
                         </div>
                     </div>
                 </div>
@@ -828,7 +828,7 @@ There are also features where users can plan out their own personal adventures. 
     <div class="portfolio-modal modal fade" id="portfolioModal8" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="close-modal" data-dismiss="modal">
+                <div class="close-modal" data-dismiss="modal" onclick="pauseAllVideos();">
                     <div class="lr">
                         <div class="rl">
                         </div>
@@ -854,7 +854,7 @@ There are also features where users can plan out their own personal adventures. 
                                     <li>Software: Magic Leap SDK</li>
                                     <li>Category: AR</li>
                                 </ul>
-                                <button type="button" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-times"></i> Close Project</button>
+                                <button type="button" onclick="pauseAllVideos();" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-times"></i> Close Project</button>
                             </div>
                         </div>
                     </div>
@@ -867,7 +867,7 @@ There are also features where users can plan out their own personal adventures. 
     <div class="portfolio-modal modal fade" id="portfolioModal9" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="close-modal" data-dismiss="modal">
+                <div class="close-modal" data-dismiss="modal" onclick="pauseAllVideos();">
                     <div class="lr">
                         <div class="rl">
                         </div>
@@ -892,7 +892,7 @@ There are also features where users can plan out their own personal adventures. 
                                     <li>Software: Unreal Engine 4</li>
                                     <li>Category: Games</li>
                                 </ul>
-                                <button type="button" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-times"></i> Close Project</button>
+                                <button type="button" onclick="pauseAllVideos();" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-times"></i> Close Project</button>
                             </div>
                         </div>
                     </div>
@@ -905,7 +905,7 @@ There are also features where users can plan out their own personal adventures. 
     <div class="portfolio-modal modal fade" id="portfolioModal10" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="close-modal" data-dismiss="modal">
+                <div class="close-modal" data-dismiss="modal" onclick="pauseAllVideos();">
                     <div class="lr">
                         <div class="rl">
                         </div>
@@ -918,7 +918,7 @@ There are also features where users can plan out their own personal adventures. 
                                 <!-- Project Details Go Here -->
                                 <h2>ONMYOJI (阴阳师)</h2>
 								<br>	
-								<div class="imagespacing"><embed width="720" height="480" src="https://www.youtube.com/embed/0DdkOykOpAo" webkitAllowFullScreen mozallowfullscreen allowFullScreen></div>
+								<div class="imagespacing"><embed src="https://www.youtube.com/embed/0DdkOykOpAo?enablejsapi=1&autoplay=0&rel=0&mute=0" frameborder="0" width="720" height="480"  webkitAllowFullScreen mozallowfullscreen allowFullScreen></embed></div>
 								<h3>Overview:</h3>
 								<p>Onmyoji (阴阳师) is a mobile game published by NetEase Games. In 2016 it was the highest grossing mobile game on the Chinese iOS store and 6th globally.</p> 
 								<h3>Role:</h3>
@@ -933,7 +933,7 @@ There are also features where users can plan out their own personal adventures. 
                                     <li>Software: Axure</li>
                                     <li>Category: Games</li>
                                 </ul>
-                                <button type="button" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-times"></i> Close Project</button>
+                                <button type="button" onclick="pauseAllVideos();" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-times"></i> Close Project</button>
                             </div>
                         </div>
                     </div>
@@ -946,7 +946,7 @@ There are also features where users can plan out their own personal adventures. 
     <div class="portfolio-modal modal fade" id="portfolioModal11" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="close-modal" data-dismiss="modal">
+                <div class="close-modal" data-dismiss="modal" onclick="pauseAllVideos();">
                     <div class="lr">
                         <div class="rl">
                         </div>
@@ -987,7 +987,7 @@ There are also features where users can plan out their own personal adventures. 
                                     <li>Software: Unity</li>
                                     <li>Category: Games</li>
                                 </ul>
-                                <button type="button" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-times"></i> Close Project</button>
+                                <button type="button" onclick="pauseAllVideos();" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-times"></i> Close Project</button>
                             </div>
                         </div>
                     </div>
@@ -1000,7 +1000,7 @@ There are also features where users can plan out their own personal adventures. 
     <div class="portfolio-modal modal fade" id="portfolioModal12" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="close-modal" data-dismiss="modal">
+                <div class="close-modal" data-dismiss="modal" onclick="pauseAllVideos();">
                     <div class="lr">
                         <div class="rl">
                         </div>
@@ -1025,7 +1025,7 @@ There are also features where users can plan out their own personal adventures. 
                                     <li>Software: Google VR</li>
                                     <li>Category: VR</li>
                                 </ul>
-                                <button type="button" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-times"></i> Close Project</button>
+                                <button type="button" onclick="pauseAllVideos();" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-times"></i> Close Project</button>
                             </div>
                         </div>
                     </div>
@@ -1044,6 +1044,15 @@ There are also features where users can plan out their own personal adventures. 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script>
     <script src="vendor/scrollreveal/scrollreveal.min.js"></script>
     <script src="vendor/magnific-popup/jquery.magnific-popup.min.js"></script>
+	<script>
+	function pauseAllVideos() 
+    { 
+		$("embed").each(function() { 
+			var src= $(this).attr('src');
+			$(this).attr('src',src);  
+		});
+    }
+	</script>
 	<script>window.onload = function(){window.scrollBy(0, 85);} </script>
 	<script>
 	var slideIndex = [1,1,1,1,1,1,1,1];
@@ -1076,8 +1085,6 @@ There are also features where users can plan out their own personal adventures. 
 	
     <!-- Theme JavaScript -->
     <script src="js/creative.min.js"></script>
-	
-	
 
 </body>
 <footer style="text-align:center;">
