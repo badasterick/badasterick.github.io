@@ -473,7 +473,8 @@ header .header-content .header-content-inner p {
   height: 75px;
   background-color: transparent;
   top: 25px;
-  left: 25px; /*used to be: right: 25px */
+  margin-right: 25px;
+  left: 100%; /*used to be: right: 25px. <- Changed it back from left */
   cursor: pointer;
 }
 .portfolio-modal .close-modal:hover {
@@ -481,7 +482,7 @@ header .header-content .header-content-inner p {
 }
 /* WHERE THE X is Made below */
 .portfolio-modal .close-modal .lr {
-  height: 75px;
+  height: 100px;
   width: 1px;
   margin-left: 35px;
   background-color: #222222;
@@ -493,7 +494,7 @@ header .header-content .header-content-inner p {
   z-index: 1051;
 }
 .portfolio-modal .close-modal .lr .rl {
-  height: 75px;
+  height: 100px;
   width: 1px;
   background-color: #222222;
   transform: rotate(90deg);
