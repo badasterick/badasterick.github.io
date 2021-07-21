@@ -54,12 +54,16 @@ h4,
 h5,
 h6 {
   font-family: 'Open Sans', 'Helvetica Neue', Arial, sans-serif;
+  text-align: left;
+  width: 780px;
 }
 p {
 	font-family: Roboto, sans-serif;
     font-size: 18px;
     line-height: 34px;
 	color: #383738;
+	width: 780px;
+	text-align: left;
   margin-bottom: 20px;
 }
 .bg-primary {
@@ -216,22 +220,23 @@ aside {
     border-color: rgba(255, 255, 255, 0.3);
   }
   .navbar-default .navbar-header .navbar-brand {
-    color: rgba(255, 255, 255, 0.7);
+    color: #383738;
   }
   .navbar-default .navbar-header .navbar-brand:hover,
   .navbar-default .navbar-header .navbar-brand:focus {
-    color: white;
+    color: #3e68ca;
   }
   .navbar-default .nav > li > a,
   .navbar-default .nav > li > a:focus {
-    color: rgba(255, 255, 255, 0.7);
+    color: #383738;
   }
   .navbar-default .nav > li > a:hover,
   .navbar-default .nav > li > a:focus:hover {
-    color: white;
+    color: #3e68ca;
   }
   .navbar-default.affix {
     background-color: white;
+	font-size: 14px;
     border-color: rgba(34, 34, 34, 0.05);
   }
   .navbar-default.affix .navbar-header .navbar-brand {
@@ -798,7 +803,7 @@ img{
 		}
 
 * {box-sizing: border-box}
-body {font-family: Verdana, sans-serif; margin:0}
+body {font-family: "Helvetica Neue",Helvetica,Arial,sans-serif; margin:0}
 .mySlides1, .mySlides2 {display: none}
 img {vertical-align: middle;}
 
@@ -807,6 +812,7 @@ img {vertical-align: middle;}
   max-width: 1000px;
   position: relative;
   margin: auto;
+  padding-bottom: 20px;
 }
 
 /* Next & previous buttons */
@@ -827,7 +833,12 @@ img {vertical-align: middle;}
 
 /* Position the "next button" to the right */
 .next {
-  right: 0;
+  right: 110px;
+  border-radius: 3px 0 0 3px;
+}
+
+.prev {
+  left: 110px;
   border-radius: 3px 0 0 3px;
 }
 

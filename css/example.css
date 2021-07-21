@@ -1740,3 +1740,106 @@ a.btn {
 #footer .span8 {
   padding-top:20px;
 }
+                                                                                                                                                                        .5 "Helvetica Neue", Helvetica, Arial, sans-serif;
+  color: #232525;
+}
+
+.nav {
+    list-style-type: none;
+    top: 8px;
+}
+
+.nav li {
+    marign: 0;
+    padding: 0;
+}
+
+.nav a {
+    font-size: 12px;
+    text-transform: uppercase;
+    line-height: 1;
+    font-weight: 800;
+    color: #afb2b6;
+    text-decoration: none;
+    display: block;
+    float: left;
+    padding: 6px 15px 2px;
+    border-radius: 10px;
+    margin: 0 5px;
+    text-shadow: 0 1px 4px rgba(0,0,0,.8);
+}
+
+.nav .active a, .nav a:hover { color: #fff }
+
+.nav a.active {
+    color: #fff;
+    text-shadow: 0 -1px 0 rgba(0,0,0,.2);
+    box-shadow: 0 1px 2px rgba(255,255,255,.1),inset 0 -1px 4px rgba(0,0,0,1);
+    background-color: #111;
+}
+
+/* Ad Packs */
+#ad_packs {
+    margin: 45px 0 30px 0;
+    width: 298px;
+    overflow: hidden;
+}
+
+#footer.small #ad_packs {
+  margin:0;
+}
+
+#bsap_aplink {
+    float: right;
+    font-size: 10px;
+}
+
+/* Type styles */
+h1 {
+    font-size: 23px;
+    text-transform: uppercase;
+}
+
+h2 { font-size: 18px }
+
+h3 { margin: 0 }
+
+p {
+    font-weight: 400;
+    color: #333;
+    margin:0 0 15px;
+}
+
+small {
+    font-weight: 400;
+    color: #333;
+}
+
+a:link, a:visited {
+    color: #d22929;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+a:hover, a:active {
+    color: #9e2020;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+a.btn {
+  color:#fff;
+  margin-bottom: 10px;
+}
+
+.section {
+  padding-top:30px;
+}
+
+#footer {
+  font-size: 12px;
+}
+
+#footer .span8 {
+  padding-top:20px;
+}

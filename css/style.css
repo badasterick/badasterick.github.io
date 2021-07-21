@@ -400,7 +400,7 @@ body {
 .views,
 .view {
   /*width: 100vw; */
-  height: 80vh;
+  height: 76vh;
 }
 
 @media (max-width: 1200px){
