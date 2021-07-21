@@ -35,7 +35,7 @@ hr.light {
 	color: #b1b1b1;
 }
 .footer-links {
-	color: #585858;
+	color: #7d7d7d;
 }
 a {
   -webkit-transition: all 0.35s;
@@ -696,7 +696,7 @@ body {
 }
 .bg-light-gray {
   background-color: #222222;
-  color: #6a6a6a;
+  color: #7d7d7d;
   padding-top: 25px;
 }
 .namehead{
