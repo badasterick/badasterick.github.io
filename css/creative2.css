@@ -123,8 +123,8 @@ aside {
 
 @media (max-width: 768px){
   .leftcolumn{
-		float: none;
-		width: 100%;
+		float: left;
+		width: 10%;
   }
   .rightcolumn{
 		float: none;
@@ -133,8 +133,8 @@ aside {
 
 @media (max-width: 992px){
 	  .leftcolumn{
-		float: none;
-		width: 100%;
+		float: left;
+		width: 10%;
   }
   .rightcolumn{
 		float: none;

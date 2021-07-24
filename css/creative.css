@@ -735,6 +735,14 @@ body {
   color: #7d7d7d;
   padding-top: 25px;
 }
+.mobilefooter{
+	text-align: right;
+}
+@media (max-width: 968px){
+	.mobilefooter{
+		text-align: left;
+	}
+}
 .namehead{
   font-size: 30px;
   font-weight: bold;
