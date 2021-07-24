@@ -16,6 +16,7 @@ body {
 	font-family: Roboto, sans-serif;
     font-size: 18px;
     line-height: 34px;
+	/*padding-bottom: 50%;*/
 }
 
 #flexbox {
@@ -152,7 +153,6 @@ body {
   flex: 1;
   height: 100%;
   align-items: center;
-  position: relative;
   bottom: 130px;
 }
 .timeline a {
@@ -403,11 +403,20 @@ body {
   height: 76vh;
 }
 
+.timelineSectionPadding{
+	padding: 80;
+	padding-bottom: 0;
+}
+
 @media (max-width: 1200px){
 	.views,
 	.view {
 	/*width: 100vw; */
-	height: 140vh;
+	height: 120vh;
+	}
+	
+	.timelineSectionPadding{
+		padding: 0;
 	}
 }
 
@@ -425,7 +434,7 @@ body {
 }
 
 .timeline__wrapper {
-  position: absolute;
+  position: relative;
   z-index: 2;
   width: 100%;
 } 
