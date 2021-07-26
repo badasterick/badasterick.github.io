@@ -412,7 +412,7 @@ body {
 	.views,
 	.view {
 	/*width: 100vw; */
-	height: 120vh;
+	height: 90vh;
 	}
 	
 	.timelineSectionPadding{
@@ -420,6 +420,28 @@ body {
 	}
 }
 
+@media (max-width: 500px){
+	.views,
+	.view {
+	/*width: 100vw; */
+	height: 110vh;
+	}
+	
+	.timelineSectionPadding{
+		padding: 0;
+	}
+}
+@media only screen and (max-width: 600px){
+		.views,
+	.view {
+	/*width: 100vw; */
+	height: 110vh;
+	}
+	
+	.timelineSectionPadding{
+		padding: 0;
+	}
+}
 .views {
   background: white;
 }
