@@ -911,3 +911,26 @@ img {vertical-align: middle;}
 
 iframe, object, embed { max-width: 100%; }
 
+.module-close {
+  margin: 40px 0 20px;
+  text-align: center;
+}
+
+.module-close__button {
+  border-radius: 999px;
+  padding: 12px 32px;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  background-color: #3e68ca;
+  border-color: #3e68ca;
+}
+
+.module-close__button:hover,
+.module-close__button:focus {
+  background-color: #2b4ca2;
+  border-color: #2b4ca2;
+  color: #fff;
+}
+
