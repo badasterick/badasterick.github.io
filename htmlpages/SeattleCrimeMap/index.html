@@ -75,13 +75,16 @@
 <script>
 (async function(){
   const APP_TOKEN_KEY='qo8Mz7qdnlXr8nqXE4fa6XBxA';
+  let appToken='';
 
   function persistToken(token){
     try{
       if(token){
         localStorage.setItem(APP_TOKEN_KEY, token);
+        appToken=token;
       }else{
         localStorage.removeItem(APP_TOKEN_KEY);
+        appToken='';
       }
     }catch(err){
       console.warn('Unable to persist token', err);
@@ -116,7 +119,7 @@
     return null;
   }
 
-  let appToken=readStoredToken();
+  appToken=readStoredToken();
   const urlToken=syncTokenFromUrl();
   if(urlToken!==null){
     appToken=urlToken;
@@ -196,11 +199,11 @@
     query += ' AND latitude IS NOT NULL AND longitude IS NOT NULL';
     query += ' ORDER BY report_date_time DESC LIMIT 10000';
     const url=`https://data.seattle.gov/resource/tazs-3rd5.geojson?$query=${encodeURIComponent(query)}`;
-    const headers = token ? { 'X-App-Token': token } : undefined;
+    const headers = appToken ? { 'X-App-Token': appToken } : undefined;
     const r=await fetch(url,{ headers });
     if(!r.ok){
       if(r.status===403){
-        throw new Error(token ? 'HTTP 403 (token rejected)' : 'HTTP 403 (app token required)');
+        throw new Error(appToken ? 'HTTP 403 (token rejected)' : 'HTTP 403 (app token required)');
       }
       throw new Error('HTTP '+r.status);
     }
