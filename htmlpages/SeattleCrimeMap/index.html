@@ -74,14 +74,18 @@
 </div>
 <script>
 (async function(){
-  const APP_TOKEN_KEY='qo8Mz7qdnlXr8nqXE4fa6XBxA';
+  const APP_TOKEN_STORAGE_KEY='seattle-crime-map.app_token';
+  const DEFAULT_APP_TOKEN='qo8Mz7qdnlXr8nqXE4fa6XBxA';
+  let appToken='';
 
   function persistToken(token){
     try{
       if(token){
-        localStorage.setItem(APP_TOKEN_KEY, token);
+        localStorage.setItem(APP_TOKEN_STORAGE_KEY, token);
+        appToken=token;
       }else{
-        localStorage.removeItem(APP_TOKEN_KEY);
+        localStorage.removeItem(APP_TOKEN_STORAGE_KEY);
+        appToken=DEFAULT_APP_TOKEN;
       }
     }catch(err){
       console.warn('Unable to persist token', err);
@@ -90,7 +94,7 @@
 
   function readStoredToken(){
     try{
-      return localStorage.getItem(APP_TOKEN_KEY)||'';
+      return localStorage.getItem(APP_TOKEN_STORAGE_KEY)||'';
     }catch(err){
       console.warn('Unable to read token', err);
       return '';
@@ -116,10 +120,10 @@
     return null;
   }
 
-  let appToken=readStoredToken();
+  appToken=readStoredToken()||DEFAULT_APP_TOKEN;
   const urlToken=syncTokenFromUrl();
   if(urlToken!==null){
-    appToken=urlToken;
+    appToken=urlToken||DEFAULT_APP_TOKEN;
   }
 
   const map = L.map('map').setView([47.6062, -122.3321], 11);
@@ -186,23 +190,37 @@
 
   async function fetchSeattle(days,filter){
     const from=dateNDaysAgo(days);
-    let query = `SELECT offense_parent_group AS offense_group, offense, mcpp, report_date_time, hundred_block_location, latitude, longitude
-                 WHERE report_date_time >= '${from}'`;
+    const params=new URLSearchParams();
+    params.set('$limit','10000');
+    params.set('$order','report_date_time DESC');
+    const conditions=[`report_date_time >= '${from}'`];
     if(filter && filter.trim()){
       const txt=filter.trim().replace(/'/g,"''");
       const like=txt.replace(/[%_]/g,s=>`\\${s}`);
-      query += ` AND (upper(offense) LIKE upper('%${like}%') OR upper(offense_parent_group) LIKE upper('%${like}%') OR upper(mcpp) LIKE upper('%${like}%'))`;
+      conditions.push(`(upper(offense) LIKE upper('%${like}%') OR upper(offense_parent_group) LIKE upper('%${like}%') OR upper(mcpp) LIKE upper('%${like}%'))`);
     }
-    query += ' AND latitude IS NOT NULL AND longitude IS NOT NULL';
-    query += ' ORDER BY report_date_time DESC LIMIT 10000';
-    const url=`https://data.seattle.gov/resource/tazs-3rd5.geojson?$query=${encodeURIComponent(query)}`;
-    const headers = token ? { 'X-App-Token': token } : undefined;
+    params.set('$where',conditions.join(' AND '));
+    const url=`https://data.seattle.gov/resource/tazs-3rd5.geojson?${params.toString()}`;
+    const headers = appToken ? { 'X-App-Token': appToken } : undefined;
     const r=await fetch(url,{ headers });
     if(!r.ok){
-      if(r.status===403){
-        throw new Error(token ? 'HTTP 403 (token rejected)' : 'HTTP 403 (app token required)');
+      let details='';
+      try{
+        details=(await r.text()||'').trim();
+        if(details){
+          try{
+            const parsed=JSON.parse(details);
+            if(parsed && typeof parsed.message==='string'){ details=parsed.message; }
+          }catch(_ignored){}
+        }
+      }catch(err){
+        console.warn('Unable to read error response',err);
       }
-      throw new Error('HTTP '+r.status);
+      if(r.status===403){
+        throw new Error(appToken ? 'HTTP 403 (token rejected)' : 'HTTP 403 (app token required)');
+      }
+      const suffix=details ? ` – ${details}` : '';
+      throw new Error(`HTTP ${r.status}${suffix}`);
     }
     return await r.json();
   }
@@ -228,7 +246,8 @@
       const layer=L.geoJSON(data,{
         pointToLayer:(f,latlng)=>{
           const p=f.properties||{};
-          const title=p.offense||p.offense_group||'Incident';
+          const offenseGroup=(p.offense_group||p.offense_parent_group||'').trim();
+          const title=p.offense||offenseGroup||'Incident';
           const when=p.report_date_time||'';
           const mcpp=(p.mcpp||'Unknown').trim();
           const addr=p.hundred_block_location||'';
@@ -236,7 +255,7 @@
           heats.push([latlng.lat,latlng.lng,0.4]);
           const areaKey=mcpp||'Unknown';
           areaCounts.set(areaKey,(areaCounts.get(areaKey)||0)+1);
-          const offenseKey=(p.offense_group||p.offense||'Other').trim()||'Other';
+          const offenseKey=(offenseGroup||p.offense||'Other').trim()||'Other';
           offenseCounts.set(offenseKey,(offenseCounts.get(offenseKey)||0)+1);
           c++; return marker;
         }
