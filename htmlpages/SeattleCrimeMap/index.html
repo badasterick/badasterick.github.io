@@ -74,17 +74,18 @@
 </div>
 <script>
 (async function(){
-  const APP_TOKEN_KEY='qo8Mz7qdnlXr8nqXE4fa6XBxA';
+  const APP_TOKEN_STORAGE_KEY='seattle-crime-map.app_token';
+  const DEFAULT_APP_TOKEN='qo8Mz7qdnlXr8nqXE4fa6XBxA';
   let appToken='';
 
   function persistToken(token){
     try{
       if(token){
-        localStorage.setItem(APP_TOKEN_KEY, token);
+        localStorage.setItem(APP_TOKEN_STORAGE_KEY, token);
         appToken=token;
       }else{
-        localStorage.removeItem(APP_TOKEN_KEY);
-        appToken='';
+        localStorage.removeItem(APP_TOKEN_STORAGE_KEY);
+        appToken=DEFAULT_APP_TOKEN;
       }
     }catch(err){
       console.warn('Unable to persist token', err);
@@ -93,7 +94,7 @@
 
   function readStoredToken(){
     try{
-      return localStorage.getItem(APP_TOKEN_KEY)||'';
+      return localStorage.getItem(APP_TOKEN_STORAGE_KEY)||'';
     }catch(err){
       console.warn('Unable to read token', err);
       return '';
@@ -119,10 +120,10 @@
     return null;
   }
 
-  appToken=readStoredToken();
+  appToken=readStoredToken()||DEFAULT_APP_TOKEN;
   const urlToken=syncTokenFromUrl();
   if(urlToken!==null){
-    appToken=urlToken;
+    appToken=urlToken||DEFAULT_APP_TOKEN;
   }
 
   const map = L.map('map').setView([47.6062, -122.3321], 11);
