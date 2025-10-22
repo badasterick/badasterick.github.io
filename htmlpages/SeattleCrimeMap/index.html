@@ -201,18 +201,24 @@
     });
   }
 
-  async function fetchSeattle(days,filter){
-    const from=dateNDaysAgo(days);
-    const params=new URLSearchParams();
-    params.set('$limit','10000');
-    params.set('$order','report_date_time DESC');
-    const conditions=[`report_date_time >= '${from}'`,'latitude IS NOT NULL','longitude IS NOT NULL'];
+  let activeDateField='report_datetime';
+
+  function buildConditions(dateField, from, filter){
+    const conditions=[`${dateField} >= '${from}'`,'latitude IS NOT NULL','longitude IS NOT NULL'];
     if(filter && filter.trim()){
       const txt=filter.trim().replace(/'/g,"''");
       const like=txt.replace(/[%_]/g,s=>`\\${s}`);
       conditions.push(`(upper(offense) LIKE upper('%${like}%') OR upper(offense_parent_group) LIKE upper('%${like}%') OR upper(mcpp) LIKE upper('%${like}%'))`);
     }
-    params.set('$where',conditions.join(' AND '));
+    return conditions.join(' AND ');
+  }
+
+  async function requestSeattle(days, filter, dateField){
+    const from=dateNDaysAgo(days);
+    const params=new URLSearchParams();
+    params.set('$limit','10000');
+    params.set('$order',`${dateField} DESC`);
+    params.set('$where',buildConditions(dateField, from, filter));
     const url=`https://data.seattle.gov/resource/tazs-3rd5.geojson?${params.toString()}`;
     const headers = appToken ? { 'X-App-Token': appToken } : undefined;
     const r=await fetch(url,{ headers });
@@ -229,14 +235,43 @@
       }catch(err){
         console.warn('Unable to read error response',err);
       }
-      console.error('Seattle fetch failed', { url, status:r.status, details });
-      if(r.status===403){
-        throw new Error(appToken ? 'HTTP 403 (token rejected)' : 'HTTP 403 (app token required)');
-      }
-      const suffix=details ? ` – ${details}` : '';
-      throw new Error(`HTTP ${r.status}${suffix}`);
+      console.error('Seattle fetch failed', { url, status:r.status, details, dateField });
+      const error = new Error(r.status===403
+        ? (appToken ? 'HTTP 403 (token rejected)' : 'HTTP 403 (app token required)')
+        : `HTTP ${r.status}${details ? ` – ${details}` : ''}`);
+      error.status=r.status;
+      error.details=details;
+      error.url=url;
+      error.dateField=dateField;
+      throw error;
     }
     return await r.json();
+  }
+
+  async function fetchSeattle(days,filter){
+    const tried=new Set();
+    let lastError=null;
+    const fieldsToTry=[activeDateField,'report_date_time','report_datetime'];
+    for(const field of fieldsToTry){
+      if(!field || tried.has(field)) continue;
+      tried.add(field);
+      try{
+        const data=await requestSeattle(days,filter,field);
+        activeDateField=field;
+        return data;
+      }catch(err){
+        lastError=err;
+        const details=String(err && err.details || '').toLowerCase();
+        const mentionsDateField=/report[_\s]?date[_\s]?time|report[_\s]?datetime/.test(details);
+        if(err && err.status===400 && field!=='report_date_time' && mentionsDateField){
+          console.info('Retrying Seattle query with alternate date column', { previousField: field, details: err.details });
+          continue;
+        }
+        throw err;
+      }
+    }
+    if(lastError) throw lastError;
+    throw new Error('Unable to fetch data');
   }
 
   async function load(){
@@ -262,7 +297,7 @@
           const p=f.properties||{};
           const offenseGroup=(p.offense_group||p.offense_parent_group||'').trim();
           const title=p.offense||offenseGroup||'Incident';
-          const when=p.report_date_time||'';
+          const when=p.report_datetime||p.report_date_time||'';
           const mcpp=(p.mcpp||'Unknown').trim();
           const addr=p.hundred_block_location||'';
           const marker=L.marker(latlng).bindPopup(`<b>${title}</b><br>${mcpp}<br>${addr}<br>${when}`);
@@ -278,6 +313,7 @@
       heat.setLatLngs(heats);
       countEl.textContent=c.toLocaleString()+' pts';
       countEl.title=`${c.toLocaleString()} incidents returned.`;
+      console.info('Seattle incidents loaded', { count:c, days, filter:text, dateField:activeDateField });
 
       if(c===0){
         setListMessage(areasHotEl,'No incidents in range');
