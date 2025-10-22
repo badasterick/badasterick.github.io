@@ -1,0 +1,295 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Seattle Metro Crime Map</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css"/>
+<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css"/>
+<script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+<script src="https://unpkg.com/leaflet.heat/dist/leaflet-heat.js"></script>
+<style>
+  html, body, #map { height: 100%; margin: 0; }
+  body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; }
+  .panel {
+    position:absolute; top:10px; left:10px; z-index:1000; background:rgba(255,255,255,0.96);
+    padding:14px; border-radius:14px; box-shadow:0 2px 14px rgba(0,0,0,0.15); max-width:390px;
+    backdrop-filter: blur(4px);
+  }
+  .row { display:flex; flex-wrap:wrap; align-items:center; gap:6px; margin:6px 0; font-size:14px; }
+  .pill { border:1px solid #ccc; border-radius:999px; padding:6px 10px; font-size:14px; }
+  button { border:1px solid #ccc; border-radius:999px; background:white; cursor:pointer; padding:6px 12px; font-size:14px; transition:background 0.2s, color 0.2s; }
+  button:hover { background:#f0f4ff; }
+  button:disabled { cursor:wait; opacity:0.75; }
+  .badge { background:#f4f4f4; border-radius:999px; padding:3px 9px; font-size:12px; font-weight:600; }
+  .note { font-size:12px; color:#555; line-height:1.4; margin:6px 0; }
+  .stats { display:flex; flex-direction:column; gap:10px; margin-top:6px; }
+  .stats-group { border-top:1px solid rgba(0,0,0,0.08); padding-top:8px; }
+  .stats-title { font-size:12px; font-weight:700; letter-spacing:0.04em; text-transform:uppercase; color:#555; margin-bottom:4px; }
+  .stats-list { display:flex; flex-direction:column; gap:4px; max-height:180px; overflow:auto; }
+  .summary-row { display:flex; align-items:center; gap:6px; font-size:13px; }
+  .summary-row .rank { font-weight:700; color:#0b57d0; width:18px; text-align:right; }
+  .summary-row .label { flex:1; min-width:0; text-overflow:ellipsis; overflow:hidden; white-space:nowrap; }
+  .summary-row .value { font-variant-numeric:tabular-nums; font-weight:600; }
+  .empty { font-size:12px; color:#777; }
+  .footnote { font-size:11px; color:#777; margin-top:4px; }
+  @media (max-width: 720px) {
+    .panel { max-width: calc(100% - 24px); right:10px; }
+    .stats-list { max-height:140px; }
+  }
+</style>
+</head>
+<body>
+<div id="map"></div>
+<div class="panel">
+  <div style="font-weight:700; font-size:16px; margin-bottom:6px;">Seattle Metro Crime Map</div>
+  <div class="row">
+    <label>Days:</label><input id="days" type="number" class="pill" min="1" max="3650" value="180"/>
+    <label>Filter:</label><input id="filter" class="pill" placeholder="e.g. BURGLARY or ASSAULT"/>
+    <button id="refresh">Refresh</button><span id="count" class="badge">0 pts</span>
+  </div>
+  <div class="row">
+    <label><input type="checkbox" id="heat" checked/> Heatmap</label>
+    <label><input type="checkbox" id="cluster" checked/> Clusters</label>
+  </div>
+  <div class="note">Filter by offense type or neighborhood (MCPP). The map loads up to 10,000 of the most recent incidents within the selected time window.</div>
+  <div class="stats">
+    <div class="stats-group">
+      <div class="stats-title">Hotspots (most incidents)</div>
+      <div id="areas-hot" class="stats-list"><div class="empty">Waiting for data…</div></div>
+    </div>
+    <div class="stats-group">
+      <div class="stats-title">Quieter areas</div>
+      <div id="areas-cool" class="stats-list"><div class="empty">Waiting for data…</div></div>
+    </div>
+    <div class="stats-group">
+      <div class="stats-title">Top offense types</div>
+      <div id="offense-hot" class="stats-list"><div class="empty">Waiting for data…</div></div>
+    </div>
+    <div class="footnote">Data: Seattle Police Dept. incident reports (<span id="updated">never</span>)</div>
+  </div>
+</div>
+<script>
+(async function(){
+  const APP_TOKEN_KEY='qo8Mz7qdnlXr8nqXE4fa6XBxA';
+
+  function persistToken(token){
+    try{
+      if(token){
+        localStorage.setItem(APP_TOKEN_KEY, token);
+      }else{
+        localStorage.removeItem(APP_TOKEN_KEY);
+      }
+    }catch(err){
+      console.warn('Unable to persist token', err);
+    }
+  }
+
+  function readStoredToken(){
+    try{
+      return localStorage.getItem(APP_TOKEN_KEY)||'';
+    }catch(err){
+      console.warn('Unable to read token', err);
+      return '';
+    }
+  }
+
+  function syncTokenFromUrl(){
+    try{
+      const params=new URLSearchParams(location.search);
+      if(params.has('app_token')){
+        const token=(params.get('app_token')||'').trim();
+        persistToken(token);
+        if(history.replaceState){
+          params.delete('app_token');
+          const query=params.toString();
+          history.replaceState({},'',location.pathname+(query?`?${query}`:'')+location.hash);
+        }
+        return token;
+      }
+    }catch(err){
+      console.warn('Unable to sync token from URL', err);
+    }
+    return null;
+  }
+
+  let appToken=readStoredToken();
+  const urlToken=syncTokenFromUrl();
+  if(urlToken!==null){
+    appToken=urlToken;
+  }
+
+  const map = L.map('map').setView([47.6062, -122.3321], 11);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19, attribution: '&copy; OpenStreetMap contributors'
+  }).addTo(map);
+
+  const cluster = L.markerClusterGroup({ disableClusteringAtZoom: 17 });
+  const heat = L.heatLayer([], { radius: 20, blur: 15, maxZoom: 17 });
+  map.addLayer(cluster); map.addLayer(heat);
+
+  const daysEl = document.getElementById('days');
+  const filterEl = document.getElementById('filter');
+  const refresh = document.getElementById('refresh');
+  const countEl = document.getElementById('count');
+  const chkHeat = document.getElementById('heat');
+  const chkCluster = document.getElementById('cluster');
+  const areasHotEl = document.getElementById('areas-hot');
+  const areasCoolEl = document.getElementById('areas-cool');
+  const offenseHotEl = document.getElementById('offense-hot');
+  const updatedEl = document.getElementById('updated');
+
+  chkHeat.addEventListener('change',()=>{ chkHeat.checked ? map.addLayer(heat):map.removeLayer(heat); });
+  chkCluster.addEventListener('change',()=>{ chkCluster.checked ? map.addLayer(cluster):map.removeLayer(cluster); });
+
+  function dateNDaysAgo(n){
+    const d=new Date();d.setHours(0,0,0,0);d.setDate(d.getDate()-n);
+    return d.toISOString();
+  }
+
+  function setListMessage(el, message){
+    if(!el) return;
+    el.replaceChildren();
+    const div=document.createElement('div');
+    div.className='empty';
+    div.textContent=message;
+    el.appendChild(div);
+  }
+
+  function renderRankedList(el, items){
+    if(!el) return;
+    el.replaceChildren();
+    if(!items.length){
+      setListMessage(el,'No data');
+      return;
+    }
+    items.forEach(([label,count],idx)=>{
+      const row=document.createElement('div');
+      row.className='summary-row';
+      const rank=document.createElement('span');
+      rank.className='rank';
+      rank.textContent=String(idx+1);
+      const name=document.createElement('span');
+      name.className='label';
+      name.textContent=label;
+      name.title=label;
+      const value=document.createElement('span');
+      value.className='value';
+      value.textContent=count.toLocaleString();
+      row.append(rank,name,value);
+      el.appendChild(row);
+    });
+  }
+
+  async function fetchSeattle(days,filter){
+    const from=dateNDaysAgo(days);
+    let query = `SELECT offense_parent_group AS offense_group, offense, mcpp, report_date_time, hundred_block_location, latitude, longitude
+                 WHERE report_date_time >= '${from}'`;
+    if(filter && filter.trim()){
+      const txt=filter.trim().replace(/'/g,"''");
+      const like=txt.replace(/[%_]/g,s=>`\\${s}`);
+      query += ` AND (upper(offense) LIKE upper('%${like}%') OR upper(offense_parent_group) LIKE upper('%${like}%') OR upper(mcpp) LIKE upper('%${like}%'))`;
+    }
+    query += ' AND latitude IS NOT NULL AND longitude IS NOT NULL';
+    query += ' ORDER BY report_date_time DESC LIMIT 10000';
+    const url=`https://data.seattle.gov/resource/tazs-3rd5.geojson?$query=${encodeURIComponent(query)}`;
+    const headers = token ? { 'X-App-Token': token } : undefined;
+    const r=await fetch(url,{ headers });
+    if(!r.ok){
+      if(r.status===403){
+        throw new Error(token ? 'HTTP 403 (token rejected)' : 'HTTP 403 (app token required)');
+      }
+      throw new Error('HTTP '+r.status);
+    }
+    return await r.json();
+  }
+
+  async function load(){
+    const days=Math.max(1,Math.min(3650,parseInt(daysEl.value||'180',10)));
+    daysEl.value=String(days);
+    const text=filterEl.value||'';
+    countEl.textContent='…';
+    setListMessage(areasHotEl,'Loading…');
+    setListMessage(areasCoolEl,'Loading…');
+    setListMessage(offenseHotEl,'Loading…');
+    refresh.disabled=true;
+    refresh.textContent='Loading…';
+    cluster.clearLayers(); heat.setLatLngs([]);
+    const seq = ++load.seq;
+    try{
+      const data=await fetchSeattle(days,text);
+      if(seq!==load.seq) return;
+      const heats=[]; let c=0;
+      const areaCounts=new Map();
+      const offenseCounts=new Map();
+      const layer=L.geoJSON(data,{
+        pointToLayer:(f,latlng)=>{
+          const p=f.properties||{};
+          const title=p.offense||p.offense_group||'Incident';
+          const when=p.report_date_time||'';
+          const mcpp=(p.mcpp||'Unknown').trim();
+          const addr=p.hundred_block_location||'';
+          const marker=L.marker(latlng).bindPopup(`<b>${title}</b><br>${mcpp}<br>${addr}<br>${when}`);
+          heats.push([latlng.lat,latlng.lng,0.4]);
+          const areaKey=mcpp||'Unknown';
+          areaCounts.set(areaKey,(areaCounts.get(areaKey)||0)+1);
+          const offenseKey=(p.offense_group||p.offense||'Other').trim()||'Other';
+          offenseCounts.set(offenseKey,(offenseCounts.get(offenseKey)||0)+1);
+          c++; return marker;
+        }
+      });
+      layer.eachLayer(l=>cluster.addLayer(l));
+      heat.setLatLngs(heats);
+      countEl.textContent=c.toLocaleString()+' pts';
+      countEl.title=`${c.toLocaleString()} incidents returned.`;
+
+      if(c===0){
+        setListMessage(areasHotEl,'No incidents in range');
+        setListMessage(areasCoolEl,'No incidents in range');
+        setListMessage(offenseHotEl,'No incidents in range');
+      }else{
+        const normalizeEntries=(map)=>Array.from(map.entries())
+          .filter(([name,count])=>count>0 && name && name.toUpperCase()!=='UNKNOWN')
+          .sort((a,b)=>b[1]-a[1]);
+        const areaData=normalizeEntries(areaCounts);
+        const offenseData=normalizeEntries(offenseCounts);
+        renderRankedList(areasHotEl, areaData.slice(0,5));
+        const quiet=[...areaData].sort((a,b)=>a[1]-b[1]).slice(0,5);
+        renderRankedList(areasCoolEl, quiet);
+        renderRankedList(offenseHotEl, offenseData.slice(0,5));
+      }
+
+      if(updatedEl){
+        const now=new Date();
+        updatedEl.textContent=now.toLocaleString();
+        const suffix=days===1?'day':'days';
+        updatedEl.title=`Covers the most recent ${days} ${suffix}. ${c.toLocaleString()} incidents shown.`;
+      }
+    }catch(e){
+      if(seq!==load.seq) return;
+      console.error('Seattle fetch failed:',e);
+      countEl.textContent='error';
+      setListMessage(areasHotEl,'Could not load data');
+      setListMessage(areasCoolEl,'Could not load data');
+      setListMessage(offenseHotEl,'Could not load data');
+      alert('Could not fetch data: '+e.message);
+    }finally{
+      if(seq===load.seq){
+        refresh.disabled=false;
+        refresh.textContent='Refresh';
+      }
+    }
+  }
+  load.seq=0;
+  refresh.addEventListener('click',load);
+  daysEl.addEventListener('change',load);
+  daysEl.addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); load(); } });
+  filterEl.addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); load(); } });
+  load();
+})();
+</script>
+</body>
+</html>
