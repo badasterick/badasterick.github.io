@@ -74,14 +74,18 @@
 </div>
 <script>
 (async function(){
-  const APP_TOKEN_KEY='qo8Mz7qdnlXr8nqXE4fa6XBxA';
+  const APP_TOKEN_STORAGE_KEY='seattle-crime-map.app_token';
+  const DEFAULT_APP_TOKEN='qo8Mz7qdnlXr8nqXE4fa6XBxA';
+  let appToken='';
 
   function persistToken(token){
     try{
       if(token){
-        localStorage.setItem(APP_TOKEN_KEY, token);
+        localStorage.setItem(APP_TOKEN_STORAGE_KEY, token);
+        appToken=token;
       }else{
-        localStorage.removeItem(APP_TOKEN_KEY);
+        localStorage.removeItem(APP_TOKEN_STORAGE_KEY);
+        appToken=DEFAULT_APP_TOKEN;
       }
     }catch(err){
       console.warn('Unable to persist token', err);
@@ -90,7 +94,7 @@
 
   function readStoredToken(){
     try{
-      return localStorage.getItem(APP_TOKEN_KEY)||'';
+      return localStorage.getItem(APP_TOKEN_STORAGE_KEY)||'';
     }catch(err){
       console.warn('Unable to read token', err);
       return '';
@@ -116,10 +120,10 @@
     return null;
   }
 
-  let appToken=readStoredToken();
+  appToken=readStoredToken()||DEFAULT_APP_TOKEN;
   const urlToken=syncTokenFromUrl();
   if(urlToken!==null){
-    appToken=urlToken;
+    appToken=urlToken||DEFAULT_APP_TOKEN;
   }
 
   const map = L.map('map').setView([47.6062, -122.3321], 11);
@@ -196,11 +200,11 @@
     query += ' AND latitude IS NOT NULL AND longitude IS NOT NULL';
     query += ' ORDER BY report_date_time DESC LIMIT 10000';
     const url=`https://data.seattle.gov/resource/tazs-3rd5.geojson?$query=${encodeURIComponent(query)}`;
-    const headers = token ? { 'X-App-Token': token } : undefined;
+    const headers = appToken ? { 'X-App-Token': appToken } : undefined;
     const r=await fetch(url,{ headers });
     if(!r.ok){
       if(r.status===403){
-        throw new Error(token ? 'HTTP 403 (token rejected)' : 'HTTP 403 (app token required)');
+        throw new Error(appToken ? 'HTTP 403 (token rejected)' : 'HTTP 403 (app token required)');
       }
       throw new Error('HTTP '+r.status);
     }
