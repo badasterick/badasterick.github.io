@@ -74,14 +74,18 @@
 </div>
 <script>
 (async function(){
-  const APP_TOKEN_KEY='qo8Mz7qdnlXr8nqXE4fa6XBxA';
+  const APP_TOKEN_STORAGE_KEY='seattle-crime-map.app_token';
+  const DEFAULT_APP_TOKEN='qo8Mz7qdnlXr8nqXE4fa6XBxA';
+  let appToken='';
 
   function persistToken(token){
     try{
       if(token){
-        localStorage.setItem(APP_TOKEN_KEY, token);
+        localStorage.setItem(APP_TOKEN_STORAGE_KEY, token);
+        appToken=token;
       }else{
-        localStorage.removeItem(APP_TOKEN_KEY);
+        localStorage.removeItem(APP_TOKEN_STORAGE_KEY);
+        appToken=DEFAULT_APP_TOKEN;
       }
     }catch(err){
       console.warn('Unable to persist token', err);
@@ -90,7 +94,7 @@
 
   function readStoredToken(){
     try{
-      return localStorage.getItem(APP_TOKEN_KEY)||'';
+      return localStorage.getItem(APP_TOKEN_STORAGE_KEY)||'';
     }catch(err){
       console.warn('Unable to read token', err);
       return '';
@@ -116,10 +120,10 @@
     return null;
   }
 
-  let appToken=readStoredToken();
+  appToken=readStoredToken()||DEFAULT_APP_TOKEN;
   const urlToken=syncTokenFromUrl();
   if(urlToken!==null){
-    appToken=urlToken;
+    appToken=urlToken||DEFAULT_APP_TOKEN;
   }
 
   const map = L.map('map').setView([47.6062, -122.3321], 11);
@@ -145,9 +149,22 @@
   chkHeat.addEventListener('change',()=>{ chkHeat.checked ? map.addLayer(heat):map.removeLayer(heat); });
   chkCluster.addEventListener('change',()=>{ chkCluster.checked ? map.addLayer(cluster):map.removeLayer(cluster); });
 
+  function toSoqlDateTimeLiteral(date){
+    const pad=n=>String(n).padStart(2,'0');
+    const y=date.getFullYear();
+    const m=pad(date.getMonth()+1);
+    const d=pad(date.getDate());
+    const h=pad(date.getHours());
+    const min=pad(date.getMinutes());
+    const s=pad(date.getSeconds());
+    return `${y}-${m}-${d}T${h}:${min}:${s}.000`;
+  }
+
   function dateNDaysAgo(n){
-    const d=new Date();d.setHours(0,0,0,0);d.setDate(d.getDate()-n);
-    return d.toISOString();
+    const d=new Date();
+    d.setHours(0,0,0,0);
+    d.setDate(d.getDate()-n);
+    return toSoqlDateTimeLiteral(d);
   }
 
   function setListMessage(el, message){
@@ -184,27 +201,77 @@
     });
   }
 
-  async function fetchSeattle(days,filter){
-    const from=dateNDaysAgo(days);
-    let query = `SELECT offense_parent_group AS offense_group, offense, mcpp, report_date_time, hundred_block_location, latitude, longitude
-                 WHERE report_date_time >= '${from}'`;
+  let activeDateField='report_datetime';
+
+  function buildConditions(dateField, from, filter){
+    const conditions=[`${dateField} >= '${from}'`,'latitude IS NOT NULL','longitude IS NOT NULL'];
     if(filter && filter.trim()){
       const txt=filter.trim().replace(/'/g,"''");
       const like=txt.replace(/[%_]/g,s=>`\\${s}`);
-      query += ` AND (upper(offense) LIKE upper('%${like}%') OR upper(offense_parent_group) LIKE upper('%${like}%') OR upper(mcpp) LIKE upper('%${like}%'))`;
+      conditions.push(`(upper(offense) LIKE upper('%${like}%') OR upper(offense_parent_group) LIKE upper('%${like}%') OR upper(mcpp) LIKE upper('%${like}%'))`);
     }
-    query += ' AND latitude IS NOT NULL AND longitude IS NOT NULL';
-    query += ' ORDER BY report_date_time DESC LIMIT 10000';
-    const url=`https://data.seattle.gov/resource/tazs-3rd5.geojson?$query=${encodeURIComponent(query)}`;
-    const headers = token ? { 'X-App-Token': token } : undefined;
+    return conditions.join(' AND ');
+  }
+
+  async function requestSeattle(days, filter, dateField){
+    const from=dateNDaysAgo(days);
+    const params=new URLSearchParams();
+    params.set('$limit','10000');
+    params.set('$order',`${dateField} DESC`);
+    params.set('$where',buildConditions(dateField, from, filter));
+    const url=`https://data.seattle.gov/resource/tazs-3rd5.geojson?${params.toString()}`;
+    const headers = appToken ? { 'X-App-Token': appToken } : undefined;
     const r=await fetch(url,{ headers });
     if(!r.ok){
-      if(r.status===403){
-        throw new Error(token ? 'HTTP 403 (token rejected)' : 'HTTP 403 (app token required)');
+      let details='';
+      try{
+        details=(await r.text()||'').trim();
+        if(details){
+          try{
+            const parsed=JSON.parse(details);
+            if(parsed && typeof parsed.message==='string'){ details=parsed.message; }
+          }catch(_ignored){}
+        }
+      }catch(err){
+        console.warn('Unable to read error response',err);
       }
-      throw new Error('HTTP '+r.status);
+      console.error('Seattle fetch failed', { url, status:r.status, details, dateField });
+      const error = new Error(r.status===403
+        ? (appToken ? 'HTTP 403 (token rejected)' : 'HTTP 403 (app token required)')
+        : `HTTP ${r.status}${details ? ` – ${details}` : ''}`);
+      error.status=r.status;
+      error.details=details;
+      error.url=url;
+      error.dateField=dateField;
+      throw error;
     }
     return await r.json();
+  }
+
+  async function fetchSeattle(days,filter){
+    const tried=new Set();
+    let lastError=null;
+    const fieldsToTry=[activeDateField,'report_date_time','report_datetime'];
+    for(const field of fieldsToTry){
+      if(!field || tried.has(field)) continue;
+      tried.add(field);
+      try{
+        const data=await requestSeattle(days,filter,field);
+        activeDateField=field;
+        return data;
+      }catch(err){
+        lastError=err;
+        const details=String(err && err.details || '').toLowerCase();
+        const mentionsDateField=/report[_\s]?date[_\s]?time|report[_\s]?datetime/.test(details);
+        if(err && err.status===400 && field!=='report_date_time' && mentionsDateField){
+          console.info('Retrying Seattle query with alternate date column', { previousField: field, details: err.details });
+          continue;
+        }
+        throw err;
+      }
+    }
+    if(lastError) throw lastError;
+    throw new Error('Unable to fetch data');
   }
 
   async function load(){
@@ -228,15 +295,16 @@
       const layer=L.geoJSON(data,{
         pointToLayer:(f,latlng)=>{
           const p=f.properties||{};
-          const title=p.offense||p.offense_group||'Incident';
-          const when=p.report_date_time||'';
+          const offenseGroup=(p.offense_group||p.offense_parent_group||'').trim();
+          const title=p.offense||offenseGroup||'Incident';
+          const when=p.report_datetime||p.report_date_time||'';
           const mcpp=(p.mcpp||'Unknown').trim();
           const addr=p.hundred_block_location||'';
           const marker=L.marker(latlng).bindPopup(`<b>${title}</b><br>${mcpp}<br>${addr}<br>${when}`);
           heats.push([latlng.lat,latlng.lng,0.4]);
           const areaKey=mcpp||'Unknown';
           areaCounts.set(areaKey,(areaCounts.get(areaKey)||0)+1);
-          const offenseKey=(p.offense_group||p.offense||'Other').trim()||'Other';
+          const offenseKey=(offenseGroup||p.offense||'Other').trim()||'Other';
           offenseCounts.set(offenseKey,(offenseCounts.get(offenseKey)||0)+1);
           c++; return marker;
         }
@@ -245,6 +313,7 @@
       heat.setLatLngs(heats);
       countEl.textContent=c.toLocaleString()+' pts';
       countEl.title=`${c.toLocaleString()} incidents returned.`;
+      console.info('Seattle incidents loaded', { count:c, days, filter:text, dateField:activeDateField });
 
       if(c===0){
         setListMessage(areasHotEl,'No incidents in range');
