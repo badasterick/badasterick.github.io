@@ -149,9 +149,22 @@
   chkHeat.addEventListener('change',()=>{ chkHeat.checked ? map.addLayer(heat):map.removeLayer(heat); });
   chkCluster.addEventListener('change',()=>{ chkCluster.checked ? map.addLayer(cluster):map.removeLayer(cluster); });
 
+  function toSoqlDateTimeLiteral(date){
+    const pad=n=>String(n).padStart(2,'0');
+    const y=date.getFullYear();
+    const m=pad(date.getMonth()+1);
+    const d=pad(date.getDate());
+    const h=pad(date.getHours());
+    const min=pad(date.getMinutes());
+    const s=pad(date.getSeconds());
+    return `${y}-${m}-${d}T${h}:${min}:${s}`;
+  }
+
   function dateNDaysAgo(n){
-    const d=new Date();d.setHours(0,0,0,0);d.setDate(d.getDate()-n);
-    return d.toISOString();
+    const d=new Date();
+    d.setHours(0,0,0,0);
+    d.setDate(d.getDate()-n);
+    return toSoqlDateTimeLiteral(d);
   }
 
   function setListMessage(el, message){
@@ -193,7 +206,7 @@
     const params=new URLSearchParams();
     params.set('$limit','10000');
     params.set('$order','report_date_time DESC');
-    const conditions=[`report_date_time >= '${from}'`];
+    const conditions=[`report_date_time >= datetime '${from}'`,'latitude IS NOT NULL','longitude IS NOT NULL'];
     if(filter && filter.trim()){
       const txt=filter.trim().replace(/'/g,"''");
       const like=txt.replace(/[%_]/g,s=>`\\${s}`);
