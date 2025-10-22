@@ -157,7 +157,7 @@
     const h=pad(date.getHours());
     const min=pad(date.getMinutes());
     const s=pad(date.getSeconds());
-    return `${y}-${m}-${d}T${h}:${min}:${s}`;
+    return `${y}-${m}-${d}T${h}:${min}:${s}.000`;
   }
 
   function dateNDaysAgo(n){
@@ -206,7 +206,7 @@
     const params=new URLSearchParams();
     params.set('$limit','10000');
     params.set('$order','report_date_time DESC');
-    const conditions=[`report_date_time >= datetime '${from}'`,'latitude IS NOT NULL','longitude IS NOT NULL'];
+    const conditions=[`report_date_time >= '${from}'`,'latitude IS NOT NULL','longitude IS NOT NULL'];
     if(filter && filter.trim()){
       const txt=filter.trim().replace(/'/g,"''");
       const like=txt.replace(/[%_]/g,s=>`\\${s}`);
@@ -229,6 +229,7 @@
       }catch(err){
         console.warn('Unable to read error response',err);
       }
+      console.error('Seattle fetch failed', { url, status:r.status, details });
       if(r.status===403){
         throw new Error(appToken ? 'HTTP 403 (token rejected)' : 'HTTP 403 (app token required)');
       }
