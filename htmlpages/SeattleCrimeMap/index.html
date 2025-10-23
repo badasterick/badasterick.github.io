@@ -280,11 +280,11 @@
     ['mcpp']
   ];
   const OFFENSE_COLUMN_PRIORITY=['offense_parent_group','offense_group','offense','offense_description','offense_type'];
-  const DATE_LITERAL_STYLES=['datetime','quoted'];
+  const DATE_LITERAL_STYLES=['quoted','datetime'];
 
   let activeDateField='report_datetime';
   let activeFilterColumns=FILTER_COLUMN_COMBINATIONS[0];
-  let activeDateLiteralStyle='datetime';
+  let activeDateLiteralStyle='quoted';
 
   function dedupeColumns(columns){
     return Array.from(new Set((columns||[]).filter(Boolean)));
@@ -418,6 +418,14 @@
             lastError=err;
             if(err && err.status===400){
               const details=String(err.details||'').toLowerCase();
+              console.warn('Seattle query attempt failed', {
+                status:err.status,
+                dateField:field,
+                columns,
+                style,
+                details:err.details,
+                where:err.where
+              });
               if(/report[_\s]?date/.test(details) || /report[_\s]?datetime/.test(details)){
                 console.info('Retrying Seattle query with alternate date handling', { previousField: field, dateStyle: style, details: err.details });
                 continue styleLoop;
@@ -426,6 +434,7 @@
                 console.info('Retrying Seattle query with alternate columns', { previousColumns: columns, details: err.details });
                 continue;
               }
+              continue;
             }
             throw err;
           }
