@@ -1,10 +1,9 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Seattle Metro Crime Map</title>
+<title>Seattle Crime Map (Working Version)</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css"/>
@@ -13,44 +12,26 @@
 <script src="https://unpkg.com/leaflet.heat/dist/leaflet-heat.js"></script>
 <style>
   html, body, #map { height: 100%; margin: 0; }
-  body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; }
   .panel {
-    position:absolute; top:10px; left:10px; z-index:1000; background:rgba(255,255,255,0.96);
-    padding:14px; border-radius:14px; box-shadow:0 2px 14px rgba(0,0,0,0.15); max-width:390px;
-    backdrop-filter: blur(4px);
+    position:absolute; top:10px; left:10px; z-index:1000;
+    background:rgba(255,255,255,0.96);
+    padding:12px; border-radius:14px;
+    box-shadow:0 2px 14px rgba(0,0,0,0.15);
+    max-width:380px;
+    font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
   }
-  .row { display:flex; flex-wrap:wrap; align-items:center; gap:6px; margin:6px 0; font-size:14px; }
-  .pill { border:1px solid #ccc; border-radius:999px; padding:6px 10px; font-size:14px; }
-  button { border:1px solid #ccc; border-radius:999px; background:white; cursor:pointer; padding:6px 12px; font-size:14px; transition:background 0.2s, color 0.2s; }
-  button:hover { background:#f0f4ff; }
-  button:disabled { cursor:wait; opacity:0.75; }
-  .badge { background:#f4f4f4; border-radius:999px; padding:3px 9px; font-size:12px; font-weight:600; }
-  .filters { display:flex; flex-wrap:wrap; gap:6px; margin:4px 0 2px; }
-  .filters button { border:1px solid #d0d7de; border-radius:999px; background:white; cursor:pointer; padding:4px 10px; font-size:13px; }
-  .filters button.active { background:#0b57d0; color:#fff; border-color:#0b57d0; box-shadow:0 2px 6px rgba(11,87,208,0.25); }
-  .filters button.clear { border-style:dashed; color:#444; }
-  .filters button.clear:hover { background:#f1f4fb; }
-  .note { font-size:12px; color:#555; line-height:1.4; margin:6px 0; }
-  .stats { display:flex; flex-direction:column; gap:10px; margin-top:6px; }
-  .stats-group { border-top:1px solid rgba(0,0,0,0.08); padding-top:8px; }
-  .stats-title { font-size:12px; font-weight:700; letter-spacing:0.04em; text-transform:uppercase; color:#555; margin-bottom:4px; }
-  .stats-list { display:flex; flex-direction:column; gap:4px; max-height:180px; overflow:auto; }
-  .summary-row { display:flex; align-items:center; gap:6px; font-size:13px; }
-  .summary-row .rank { font-weight:700; color:#0b57d0; width:18px; text-align:right; }
-  .summary-row .label { flex:1; min-width:0; text-overflow:ellipsis; overflow:hidden; white-space:nowrap; }
-  .summary-row .value { font-variant-numeric:tabular-nums; font-weight:600; }
-  .empty { font-size:12px; color:#777; }
-  .footnote { font-size:11px; color:#777; margin-top:4px; }
-  @media (max-width: 720px) {
-    .panel { max-width: calc(100% - 24px); right:10px; }
-    .stats-list { max-height:140px; }
-  }
+  .row { display:flex; flex-wrap:wrap; align-items:center; gap:6px; margin:5px 0; }
+  .pill { border:1px solid #ccc; border-radius:999px; padding:5px 10px; }
+  button { border:1px solid #ccc; border-radius:999px; background:white; cursor:pointer; padding:5px 10px; }
+  button.active { background:#0b57d0; color:white; }
+  .badge { background:#f4f4f4; border-radius:999px; padding:3px 8px; font-size:12px; }
 </style>
 </head>
 <body>
 <div id="map"></div>
+
 <div class="panel">
-  <div style="font-weight:700; font-size:16px; margin-bottom:6px;">Seattle Metro Crime Map</div>
+  <div style="font-weight:700; font-size:16px; margin-bottom:6px;">Seattle Crime Map</div>
   <div class="row">
     <label>Days:</label><input id="days" type="number" class="pill" min="1" max="3650" value="180"/>
     <label>Filter:</label><input id="filter" class="pill" placeholder="e.g. BURGLARY or ASSAULT"/>
@@ -60,81 +41,17 @@
     <label><input type="checkbox" id="heat" checked/> Heatmap</label>
     <label><input type="checkbox" id="cluster" checked/> Clusters</label>
   </div>
-  <div id="filters" class="filters"></div>
-  <div class="note">Use the filter buttons or type a custom search (offense, parent group, or neighborhood). The map loads up to 10,000 of the most recent incidents within the selected time window.</div>
-  <div class="stats">
-    <div class="stats-group">
-      <div class="stats-title">Hotspots (most incidents)</div>
-      <div id="areas-hot" class="stats-list"><div class="empty">Waiting for data…</div></div>
-    </div>
-    <div class="stats-group">
-      <div class="stats-title">Quieter areas</div>
-      <div id="areas-cool" class="stats-list"><div class="empty">Waiting for data…</div></div>
-    </div>
-    <div class="stats-group">
-      <div class="stats-title">Top offense types</div>
-      <div id="offense-hot" class="stats-list"><div class="empty">Waiting for data…</div></div>
-    </div>
-    <div class="footnote">Data: Seattle Police Dept. incident reports (<span id="updated">never</span>)</div>
+  <div style="font-size:12px; margin-top:8px;">
+    Filter by offense type or neighborhood (MCPP). The map loads up to 10,000 of the most recent incidents within the selected time window.
   </div>
 </div>
+
 <script>
 (async function(){
-  const APP_TOKEN_STORAGE_KEY='seattle-crime-map.app_token';
-  const DEFAULT_APP_TOKEN='qo8Mz7qdnlXr8nqXE4fa6XBxA';
-  let appToken='';
-
-  function persistToken(token){
-    try{
-      if(token){
-        localStorage.setItem(APP_TOKEN_STORAGE_KEY, token);
-        appToken=token;
-      }else{
-        localStorage.removeItem(APP_TOKEN_STORAGE_KEY);
-        appToken=DEFAULT_APP_TOKEN;
-      }
-    }catch(err){
-      console.warn('Unable to persist token', err);
-    }
-  }
-
-  function readStoredToken(){
-    try{
-      return localStorage.getItem(APP_TOKEN_STORAGE_KEY)||'';
-    }catch(err){
-      console.warn('Unable to read token', err);
-      return '';
-    }
-  }
-
-  function syncTokenFromUrl(){
-    try{
-      const params=new URLSearchParams(location.search);
-      if(params.has('app_token')){
-        const token=(params.get('app_token')||'').trim();
-        persistToken(token);
-        if(history.replaceState){
-          params.delete('app_token');
-          const query=params.toString();
-          history.replaceState({},'',location.pathname+(query?`?${query}`:'')+location.hash);
-        }
-        return token;
-      }
-    }catch(err){
-      console.warn('Unable to sync token from URL', err);
-    }
-    return null;
-  }
-
-  appToken=readStoredToken()||DEFAULT_APP_TOKEN;
-  const urlToken=syncTokenFromUrl();
-  if(urlToken!==null){
-    appToken=urlToken||DEFAULT_APP_TOKEN;
-  }
-
   const map = L.map('map').setView([47.6062, -122.3321], 11);
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    maxZoom: 19, attribution: '&copy; OpenStreetMap contributors'
+    maxZoom: 19,
+    attribution: '&copy; OpenStreetMap contributors'
   }).addTo(map);
 
   const cluster = L.markerClusterGroup({ disableClusteringAtZoom: 17 });
@@ -147,404 +64,65 @@
   const countEl = document.getElementById('count');
   const chkHeat = document.getElementById('heat');
   const chkCluster = document.getElementById('cluster');
-  const areasHotEl = document.getElementById('areas-hot');
-  const areasCoolEl = document.getElementById('areas-cool');
-  const offenseHotEl = document.getElementById('offense-hot');
-  const updatedEl = document.getElementById('updated');
-  const filtersEl = document.getElementById('filters');
-
-  const FILTER_PRESETS=[
-    { key:'assault', label:'Assault', keywords:['ASSAULT'] },
-    { key:'burglary', label:'Burglary', keywords:['BURGLARY'] },
-    { key:'robbery', label:'Robbery', keywords:['ROBBERY'] },
-    { key:'motor_vehicle', label:'Motor Vehicle Theft', keywords:['MOTOR VEHICLE','AUTO THEFT'] },
-    { key:'theft', label:'Theft', keywords:['THEFT','LARCENY'] },
-    { key:'weapons', label:'Weapons', keywords:['WEAPON'] },
-    { key:'narcotics', label:'Drugs', keywords:['NARCOTIC','DRUG'] },
-    { key:'property_damage', label:'Property Damage', keywords:['DESTRUCTION','PROPERTY DAMAGE','VANDALISM'] },
-    { key:'sex_offense', label:'Sex Offenses', keywords:['SEX OFFENSE','RAPE'] },
-    { key:'homicide', label:'Homicide', keywords:['HOMICIDE'] }
-  ];
-
-  const presetButtons=new Map();
-  const selectedPresetKeys=new Set();
-
-  function togglePreset(key){
-    if(selectedPresetKeys.has(key)){
-      selectedPresetKeys.delete(key);
-    }else{
-      selectedPresetKeys.add(key);
-    }
-    const btn=presetButtons.get(key);
-    if(btn){
-      btn.classList.toggle('active',selectedPresetKeys.has(key));
-    }
-    load();
-  }
-
-  function clearPresets(){
-    if(!selectedPresetKeys.size) return;
-    selectedPresetKeys.clear();
-    presetButtons.forEach(btn=>btn.classList.remove('active'));
-    load();
-  }
-
-  if(filtersEl){
-    FILTER_PRESETS.forEach(preset=>{
-      const btn=document.createElement('button');
-      btn.type='button';
-      btn.textContent=preset.label;
-      btn.dataset.key=preset.key;
-      btn.addEventListener('click',()=>togglePreset(preset.key));
-      filtersEl.appendChild(btn);
-      presetButtons.set(preset.key,btn);
-    });
-    const clearBtn=document.createElement('button');
-    clearBtn.type='button';
-    clearBtn.textContent='Clear filters';
-    clearBtn.classList.add('clear');
-    clearBtn.addEventListener('click',clearPresets);
-    filtersEl.appendChild(clearBtn);
-  }
-
-  function getSelectedPresets(){
-    return FILTER_PRESETS.filter(preset=>selectedPresetKeys.has(preset.key));
-  }
 
   chkHeat.addEventListener('change',()=>{ chkHeat.checked ? map.addLayer(heat):map.removeLayer(heat); });
   chkCluster.addEventListener('change',()=>{ chkCluster.checked ? map.addLayer(cluster):map.removeLayer(cluster); });
 
-  function toIsoDateTime(date){
-    const pad=n=>String(n).padStart(2,'0');
-    const y=date.getFullYear();
-    const m=pad(date.getMonth()+1);
-    const d=pad(date.getDate());
-    const h=pad(date.getHours());
-    const min=pad(date.getMinutes());
-    const s=pad(date.getSeconds());
-    return `${y}-${m}-${d}T${h}:${min}:${s}`;
+  function dateNDaysAgo(n){
+    const d=new Date();d.setHours(0,0,0,0);d.setDate(d.getDate()-n);
+    return d.toISOString().split('T')[0]; // only date
   }
 
-  function buildDateLiteral(days, style){
-    const d=new Date();
-    d.setHours(0,0,0,0);
-    d.setDate(d.getDate()-days);
-    const base=toIsoDateTime(d);
-    if(style==='quoted'){
-      return `'${base}.000'`;
+  async function fetchSeattle(days,filter){
+    const from=dateNDaysAgo(days);
+    const safeFilter = (filter||'').replace(/'/g,"''");
+    let query = `
+      SELECT offense_parent_group, offense, mcpp, report_date, hundred_block_location, latitude, longitude
+      WHERE report_date >= '${from}'
+      AND latitude IS NOT NULL AND longitude IS NOT NULL
+    `;
+    if(safeFilter){
+      const f = safeFilter.toUpperCase();
+      query += ` AND (upper(offense) LIKE '%${f}%' OR upper(offense_parent_group) LIKE '%${f}%' OR upper(mcpp) LIKE '%${f}%')`;
     }
-    return `datetime '${base}'`;
-  }
+    query += ` ORDER BY report_date DESC LIMIT 10000`;
 
-  function setListMessage(el, message){
-    if(!el) return;
-    el.replaceChildren();
-    const div=document.createElement('div');
-    div.className='empty';
-    div.textContent=message;
-    el.appendChild(div);
-  }
-
-  function renderRankedList(el, items){
-    if(!el) return;
-    el.replaceChildren();
-    if(!items.length){
-      setListMessage(el,'No data');
-      return;
-    }
-    items.forEach(([label,count],idx)=>{
-      const row=document.createElement('div');
-      row.className='summary-row';
-      const rank=document.createElement('span');
-      rank.className='rank';
-      rank.textContent=String(idx+1);
-      const name=document.createElement('span');
-      name.className='label';
-      name.textContent=label;
-      name.title=label;
-      const value=document.createElement('span');
-      value.className='value';
-      value.textContent=count.toLocaleString();
-      row.append(rank,name,value);
-      el.appendChild(row);
-    });
-  }
-
-  const FILTER_COLUMN_COMBINATIONS=[
-    ['offense_parent_group','offense','offense_description','mcpp'],
-    ['offense','offense_description','mcpp'],
-    ['offense_parent_group','offense_description','mcpp'],
-    ['offense_parent_group','mcpp'],
-    ['offense_description','mcpp'],
-    ['offense','mcpp'],
-    ['mcpp']
-  ];
-  const OFFENSE_COLUMN_PRIORITY=['offense_parent_group','offense_group','offense','offense_description','offense_type'];
-  const DATE_LITERAL_STYLES=['quoted','datetime'];
-
-  let activeDateField='report_datetime';
-  let activeFilterColumns=FILTER_COLUMN_COMBINATIONS[0];
-  let activeDateLiteralStyle='quoted';
-
-  function dedupeColumns(columns){
-    return Array.from(new Set((columns||[]).filter(Boolean)));
-  }
-
-  function sanitizeSearchText(value){
-    if(!value) return '';
-    return value.replace(/[^0-9A-Za-z\s/\-]/g,' ').replace(/\s+/g,' ').trim();
-  }
-
-  function pickOffenseColumn(columns){
-    if(!columns || !columns.length) return null;
-    for(const candidate of OFFENSE_COLUMN_PRIORITY){
-      const match=columns.find(col=>col.toLowerCase()===candidate.toLowerCase());
-      if(match) return match;
-    }
-    return columns.find(col=>/offense/i.test(col))||columns[0];
-  }
-
-  function buildPresetClauses(presets, columns){
-    if(!presets || !presets.length) return [];
-    const offenseColumn=pickOffenseColumn(columns);
-    if(!offenseColumn) return [];
-    const clauses=[];
-    presets.forEach(preset=>{
-      const keywords=Array.isArray(preset.keywords)?preset.keywords:[];
-      const keywordClauses=keywords.map(keyword=>{
-        const sanitized=sanitizeSearchText(keyword);
-        if(!sanitized) return null;
-        const like=sanitized.replace(/'/g,"''");
-        return `upper(${offenseColumn}) LIKE upper('%${like}%')`;
-      }).filter(Boolean);
-      if(keywordClauses.length===1){
-        clauses.push(keywordClauses[0]);
-      }else if(keywordClauses.length>1){
-        clauses.push(`(${keywordClauses.join(' OR ')})`);
-      }
-    });
-    return clauses;
-  }
-
-  function buildConditions(dateField, fromLiteral, filterText, columns, presets){
-    const safeColumns=dedupeColumns(columns);
-    if(!safeColumns.length) safeColumns.push('mcpp');
-    const conditions=[`${dateField} >= ${fromLiteral}`,'latitude IS NOT NULL','longitude IS NOT NULL'];
-    const presetClauses=buildPresetClauses(presets, safeColumns);
-    if(presetClauses.length){
-      conditions.push(`(${presetClauses.join(' OR ')})`);
-    }
-    const sanitizedFilter=sanitizeSearchText(filterText);
-    if(sanitizedFilter){
-      const like=sanitizedFilter.replace(/'/g,"''");
-      const searchClauses=safeColumns.map(col=>`upper(${col}) LIKE upper('%${like}%')`);
-      if(searchClauses.length===1){
-        conditions.push(searchClauses[0]);
-      }else if(searchClauses.length>1){
-        conditions.push(`(${searchClauses.join(' OR ')})`);
-      }
-    }
-    return conditions.join(' AND ');
-  }
-
-  async function requestSeattle(days, filterText, dateField, columns, presets, dateStyle){
-    const style=DATE_LITERAL_STYLES.includes(dateStyle)?dateStyle:'datetime';
-    const from=buildDateLiteral(days, style);
-    const params=new URLSearchParams();
-    params.set('$limit','10000');
-    params.set('$order',`${dateField} DESC`);
-    const whereClause=buildConditions(dateField, from, filterText, columns, presets);
-    params.set('$where',whereClause);
-    const url=`https://data.seattle.gov/resource/tazs-3rd5.geojson?${params.toString()}`;
-    const headers = appToken ? { 'X-App-Token': appToken } : undefined;
-    const r=await fetch(url,{ headers });
-    if(!r.ok){
-      let details='';
-      try{
-        details=(await r.text()||'').trim();
-        if(details){
-          try{
-            const parsed=JSON.parse(details);
-            if(parsed && typeof parsed.message==='string'){ details=parsed.message; }
-          }catch(_ignored){}
-        }
-      }catch(err){
-        console.warn('Unable to read error response',err);
-      }
-      console.error('Seattle fetch failed', { url, status:r.status, details, dateField, columns, presets, dateStyle:style, where:whereClause });
-      const error = new Error(r.status===403
-        ? (appToken ? 'HTTP 403 (token rejected)' : 'HTTP 403 (app token required)')
-        : `HTTP ${r.status}${details ? ` – ${details}` : ''}`);
-      error.status=r.status;
-      error.details=details;
-      error.url=url;
-      error.dateField=dateField;
-      error.columns=columns;
-      error.presets=presets;
-      error.where=whereClause;
-      error.dateStyle=style;
-      throw error;
-    }
+    const url = 'https://data.seattle.gov/resource/tazs-3rd5.geojson?$query=' + encodeURIComponent(query);
+    const r = await fetch(url);
+    if(!r.ok) throw new Error("HTTP "+r.status);
     return await r.json();
   }
 
-  async function fetchSeattle(days,filterText,presets){
-    const dateFields=[activeDateField,'report_datetime','report_date_time','report_date','reportdate'].filter(Boolean);
-    const uniqueDateFields=[];
-    dateFields.forEach(field=>{ if(field && !uniqueDateFields.includes(field)) uniqueDateFields.push(field); });
-    const combos=[activeFilterColumns,...FILTER_COLUMN_COMBINATIONS];
-    const uniqueCombos=[];
-    combos.forEach(combo=>{
-      const normalized=dedupeColumns(combo);
-      const key=normalized.join('|');
-      if(!uniqueCombos.some(existing=>existing.join('|')===key)){
-        uniqueCombos.push(normalized);
-      }
-    });
-    const styles=[activeDateLiteralStyle,...DATE_LITERAL_STYLES];
-    const uniqueStyles=[];
-    styles.forEach(style=>{ if(style && !uniqueStyles.includes(style)) uniqueStyles.push(style); });
-    let lastError=null;
-    outer: for(const field of uniqueDateFields){
-      styleLoop: for(const style of uniqueStyles){
-        for(const columns of uniqueCombos){
-          try{
-            const data=await requestSeattle(days,filterText,field,columns,presets,style);
-            activeDateField=field;
-            activeFilterColumns=columns;
-            activeDateLiteralStyle=style;
-            return data;
-          }catch(err){
-            lastError=err;
-            if(err && err.status===400){
-              const details=String(err.details||'').toLowerCase();
-              console.warn('Seattle query attempt failed', {
-                status:err.status,
-                dateField:field,
-                columns,
-                style,
-                details:err.details,
-                where:err.where
-              });
-              if(/report[_\s]?date/.test(details) || /report[_\s]?datetime/.test(details)){
-                console.info('Retrying Seattle query with alternate date handling', { previousField: field, dateStyle: style, details: err.details });
-                continue styleLoop;
-              }
-              if(/column/.test(details) || /no such field/.test(details) || /unknown field/.test(details) || /invalid identifier/.test(details)){
-                console.info('Retrying Seattle query with alternate columns', { previousColumns: columns, details: err.details });
-                continue;
-              }
-              continue;
-            }
-            throw err;
-          }
-        }
-      }
-    }
-    if(lastError) throw lastError;
-    throw new Error('Unable to fetch data');
-  }
-
   async function load(){
-    const days=Math.max(1,Math.min(3650,parseInt(daysEl.value||'180',10)));
-    daysEl.value=String(days);
-    const text=filterEl.value||'';
-    const presets=getSelectedPresets();
+    const days = Math.max(1, Math.min(3650, parseInt(daysEl.value||'180',10)));
+    const text = filterEl.value || '';
     countEl.textContent='…';
-    setListMessage(areasHotEl,'Loading…');
-    setListMessage(areasCoolEl,'Loading…');
-    setListMessage(offenseHotEl,'Loading…');
-    refresh.disabled=true;
-    refresh.textContent='Loading…';
     cluster.clearLayers(); heat.setLatLngs([]);
-    const seq = ++load.seq;
     try{
-      const data=await fetchSeattle(days,text,presets);
-      if(seq!==load.seq) return;
+      const data = await fetchSeattle(days, text);
       const heats=[]; let c=0;
-      const areaCounts=new Map();
-      const offenseCounts=new Map();
-      const layer=L.geoJSON(data,{
+      L.geoJSON(data, {
         pointToLayer:(f,latlng)=>{
           const p=f.properties||{};
-          const offenseGroup=(p.offense_group||p.offense_parent_group||p.offense_description||'').trim();
-          const title=(p.offense||p.offense_description||offenseGroup||'Incident').trim()||'Incident';
-          const when=p.report_datetime||p.report_date_time||p.report_date||p.offense_start_datetime||p.offense_end_datetime||'';
-          const mcpp=(p.mcpp||'Unknown').trim();
-          const addr=p.hundred_block_location||p.block_address||'';
+          const title=p.offense||p.offense_parent_group||'Incident';
+          const when=p.report_date||'';
+          const mcpp=p.mcpp||'';
+          const addr=p.hundred_block_location||'';
           const marker=L.marker(latlng).bindPopup(`<b>${title}</b><br>${mcpp}<br>${addr}<br>${when}`);
           heats.push([latlng.lat,latlng.lng,0.4]);
-          const areaKey=mcpp||'Unknown';
-          areaCounts.set(areaKey,(areaCounts.get(areaKey)||0)+1);
-          const offenseKey=(offenseGroup||p.offense||p.offense_description||'Other').trim()||'Other';
-          offenseCounts.set(offenseKey,(offenseCounts.get(offenseKey)||0)+1);
           c++; return marker;
         }
-      });
-      layer.eachLayer(l=>cluster.addLayer(l));
+      }).eachLayer(l=>cluster.addLayer(l));
       heat.setLatLngs(heats);
       countEl.textContent=c.toLocaleString()+' pts';
-      const filterSummary=[];
-      if(presets.length){
-        filterSummary.push(`Buttons: ${presets.map(p=>p.label).join(', ')}`);
-      }
-      if(text && text.trim()){
-        filterSummary.push(`Custom: ${text.trim()}`);
-      }
-      countEl.title=`${c.toLocaleString()} incidents returned.${filterSummary.length ? ' '+filterSummary.join(' | ') : ''}`;
-      console.info('Seattle incidents loaded', {
-        count:c,
-        days,
-        filter:text,
-        presets:presets.map(p=>p.label),
-        dateField:activeDateField,
-        columns:activeFilterColumns,
-        dateStyle:activeDateLiteralStyle
-      });
-
-      if(c===0){
-        setListMessage(areasHotEl,'No incidents in range');
-        setListMessage(areasCoolEl,'No incidents in range');
-        setListMessage(offenseHotEl,'No incidents in range');
-      }else{
-        const normalizeEntries=(map)=>Array.from(map.entries())
-          .filter(([name,count])=>count>0 && name && name.toUpperCase()!=='UNKNOWN')
-          .sort((a,b)=>b[1]-a[1]);
-        const areaData=normalizeEntries(areaCounts);
-        const offenseData=normalizeEntries(offenseCounts);
-        renderRankedList(areasHotEl, areaData.slice(0,5));
-        const quiet=[...areaData].sort((a,b)=>a[1]-b[1]).slice(0,5);
-        renderRankedList(areasCoolEl, quiet);
-        renderRankedList(offenseHotEl, offenseData.slice(0,5));
-      }
-
-      if(updatedEl){
-        const now=new Date();
-        updatedEl.textContent=now.toLocaleString();
-        const suffix=days===1?'day':'days';
-        const filterLabel=filterSummary.length ? ' '+filterSummary.join(' | ') : '';
-        updatedEl.title=`Covers the most recent ${days} ${suffix}. ${c.toLocaleString()} incidents shown.${filterLabel}`;
-      }
     }catch(e){
-      if(seq!==load.seq) return;
       console.error('Seattle fetch failed:',e);
       countEl.textContent='error';
-      setListMessage(areasHotEl,'Could not load data');
-      setListMessage(areasCoolEl,'Could not load data');
-      setListMessage(offenseHotEl,'Could not load data');
       alert('Could not fetch data: '+e.message);
-    }finally{
-      if(seq===load.seq){
-        refresh.disabled=false;
-        refresh.textContent='Refresh';
-      }
     }
   }
-  load.seq=0;
+
   refresh.addEventListener('click',load);
-  daysEl.addEventListener('change',load);
-  daysEl.addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); load(); } });
-  filterEl.addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); load(); } });
   load();
 })();
 </script>
