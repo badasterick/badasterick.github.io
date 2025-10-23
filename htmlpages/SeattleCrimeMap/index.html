@@ -347,23 +347,46 @@
     return conditions.join(' AND ');
   }
 
-async function requestSeattle(days, filterText, dateField, columns, presets, dateStyle) {
-  const from = buildDateLiteral(days, 'quoted');
-  const params = new URLSearchParams();
-  params.set('$limit', '10000');
-  params.set('$order', 'report_date DESC');
-
-  // Hardcode the working date field
-  const whereClause = buildConditions('report_date', from, filterText, columns, presets);
-  params.set('$where', whereClause);
-
-  const url = `https://data.seattle.gov/resource/tazs-3rd5.geojson?${params.toString()}`;
-  const headers = appToken ? { 'X-App-Token': appToken } : undefined;
-  const r = await fetch(url, { headers });
-  if (!r.ok) throw new Error(`HTTP ${r.status}`);
-  return await r.json();
-}
-
+  async function requestSeattle(days, filterText, dateField, columns, presets, dateStyle){
+    const style=DATE_LITERAL_STYLES.includes(dateStyle)?dateStyle:'datetime';
+    const from=buildDateLiteral(days, style);
+    const params=new URLSearchParams();
+    params.set('$limit','10000');
+    params.set('$order',`${dateField} DESC`);
+    const whereClause=buildConditions(dateField, from, filterText, columns, presets);
+    params.set('$where',whereClause);
+    const url=`https://data.seattle.gov/resource/tazs-3rd5.geojson?${params.toString()}`;
+    const headers = appToken ? { 'X-App-Token': appToken } : undefined;
+    const r=await fetch(url,{ headers });
+    if(!r.ok){
+      let details='';
+      try{
+        details=(await r.text()||'').trim();
+        if(details){
+          try{
+            const parsed=JSON.parse(details);
+            if(parsed && typeof parsed.message==='string'){ details=parsed.message; }
+          }catch(_ignored){}
+        }
+      }catch(err){
+        console.warn('Unable to read error response',err);
+      }
+      console.error('Seattle fetch failed', { url, status:r.status, details, dateField, columns, presets, dateStyle:style, where:whereClause });
+      const error = new Error(r.status===403
+        ? (appToken ? 'HTTP 403 (token rejected)' : 'HTTP 403 (app token required)')
+        : `HTTP ${r.status}${details ? ` – ${details}` : ''}`);
+      error.status=r.status;
+      error.details=details;
+      error.url=url;
+      error.dateField=dateField;
+      error.columns=columns;
+      error.presets=presets;
+      error.where=whereClause;
+      error.dateStyle=style;
+      throw error;
+    }
+    return await r.json();
+  }
 
   async function fetchSeattle(days,filterText,presets){
     const dateFields=[activeDateField,'report_datetime','report_date_time','report_date','reportdate'].filter(Boolean);
