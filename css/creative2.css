@@ -934,3 +934,71 @@ iframe, object, embed { max-width: 100%; }
   color: #fff;
 }
 
+/* Dark theme overrides for standalone portfolio pages */
+body.dark-page {
+  background-color: #0d0f14;
+  color: #d7dbe3;
+}
+
+body.dark-page .modal-body {
+  background-color: #0d0f14;
+  color: #d7dbe3;
+}
+
+body.dark-page h1,
+body.dark-page h2,
+body.dark-page h3,
+body.dark-page h4,
+body.dark-page h5,
+body.dark-page h6 {
+  color: #f3f5f9;
+}
+
+body.dark-page p,
+body.dark-page .list-inline,
+body.dark-page .list-inline > li {
+  color: #c7cdd8;
+}
+
+body.dark-page a {
+  color: #8fb1ff;
+}
+
+body.dark-page a:hover,
+body.dark-page a:focus {
+  color: #c2d3ff;
+}
+
+body.dark-page .navbar-default {
+  background-color: #0f1115;
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+body.dark-page .navbar-default .navbar-header .navbar-brand {
+  color: #e6ebf5;
+}
+
+body.dark-page .navbar-default .navbar-header .navbar-brand:hover,
+body.dark-page .navbar-default .navbar-header .navbar-brand:focus {
+  color: #8fb1ff;
+}
+
+body.dark-page .navbar-default .navbar-header .navbar-toggle {
+  color: #cfd6e3;
+}
+
+body.dark-page .navbar-default .nav > li > a,
+body.dark-page .navbar-default .nav > li > a:focus {
+  color: #cfd6e3;
+}
+
+body.dark-page .navbar-default .nav > li > a:hover,
+body.dark-page .navbar-default .nav > li > a:focus:hover {
+  color: #8fb1ff;
+}
+
+body.dark-page .navbar-default.affix {
+  background-color: #0f1115;
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
